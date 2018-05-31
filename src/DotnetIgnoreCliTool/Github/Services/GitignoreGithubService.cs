@@ -1,4 +1,5 @@
 ﻿using Octokit;
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
@@ -31,9 +32,22 @@ namespace DotnetIgnoreCliTool.Github.Services
 
         public async Task<GitignoreFile> GetIgnoreFile(string name)
         {
+            bool IsRequestedGitignoreFile(RepositoryContent content)
+            {
+                var isExactlyEqual = string.Equals(content.Name, name, StringComparison.InvariantCultureIgnoreCase);
+
+                const string gitignoreFileName = ".gitignore";
+                if (!isExactlyEqual && name.Contains(gitignoreFileName))
+                {
+                    return content.Name.StartsWith(name, StringComparison.InvariantCultureIgnoreCase);
+                }
+
+                return isExactlyEqual;
+            }
+
             IReadOnlyList<RepositoryContent> repositoryContents = await _gitHubClient.Repository.Content.GetAllContents(RepositoryOwner, RepositoryName);
             var gitignoreFile = repositoryContents
-                .FirstOrDefault(content => content.Type.Value == ContentType.File && content.Name == name);
+                .FirstOrDefault(content => content.Type.Value == ContentType.File && IsRequestedGitignoreFile(content));
 
             if (gitignoreFile is null)
             {
