@@ -1,7 +1,7 @@
-﻿using DotnetIgnoreCliTool.Cli.FIles;
-using DotnetIgnoreCliTool.Cli.Models;
+﻿using DotnetIgnoreCliTool.Cli.Args;
+using DotnetIgnoreCliTool.Cli.FIles;
 using DotnetIgnoreCliTool.Cli.Output;
-using DotnetIgnoreCliTool.Github;
+using DotnetIgnoreCliTool.Github.Models;
 using DotnetIgnoreCliTool.Github.Services;
 using PowerArgs;
 using System.Collections.Generic;

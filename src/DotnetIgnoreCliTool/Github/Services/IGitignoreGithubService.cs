@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using DotnetIgnoreCliTool.Github.Models;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace DotnetIgnoreCliTool.Github
+namespace DotnetIgnoreCliTool.Github.Services
 {
     public interface IGitignoreGithubService
     {

@@ -1,4 +1,4 @@
-﻿namespace DotnetIgnoreCliTool.Github
+﻿namespace DotnetIgnoreCliTool.Github.Models
 {
     public class GitignoreFile
     {

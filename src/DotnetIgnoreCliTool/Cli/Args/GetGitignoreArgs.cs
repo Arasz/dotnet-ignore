@@ -1,6 +1,6 @@
 ﻿using PowerArgs;
 
-namespace DotnetIgnoreCliTool.Cli.Models
+namespace DotnetIgnoreCliTool.Cli.Args
 {
     [TabCompletion]
     public class GetGitignoreArgs

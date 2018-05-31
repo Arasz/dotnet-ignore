@@ -1,4 +1,5 @@
-﻿using Octokit;
+﻿using DotnetIgnoreCliTool.Github.Models;
+using Octokit;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
