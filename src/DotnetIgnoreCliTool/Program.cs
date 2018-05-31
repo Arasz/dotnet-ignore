@@ -1,12 +1,14 @@
-﻿using System;
+﻿using DotnetIgnoreCliTool.Cli;
+using PowerArgs;
+using System.Threading.Tasks;
 
 namespace DotnetIgnoreCliTool
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static async Task Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            await Args.InvokeActionAsync<CommandLineEntryPoint>(args);
         }
     }
 }
