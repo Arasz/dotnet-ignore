@@ -12,7 +12,7 @@ namespace DotnetIgnoreCliTool.Cli.Args
         [ArgExample("visualstudio", "only enviroment part of file name")]
         public string Name { get; set; }
 
-        [ArgDescription("destination directory where gitignore will be saved")]
+        [ArgDescription("destination directory where gitignore will be saved. If not provided execution directory will be used")]
         [ArgShortcut("-d")]
         [ArgExample("C:/", "example directory path")]
         [ArgExistingDirectory]
