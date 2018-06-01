@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "DotnetIgnoreCliTool": {
+      "commandName": "Project",
+      "commandLineArgs": "get -n maven"
+    }
+  }
+}

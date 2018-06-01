@@ -10,6 +10,11 @@ namespace DotnetIgnoreCliTool.Cli.FIles
 
         public async Task WriteToFileAsync(string destination, string content)
         {
+            if (string.IsNullOrEmpty(destination))
+            {
+                destination = Directory.GetCurrentDirectory();
+            }
+
             var path = Path.Combine(destination, GitignoreFileName);
             using (var fileStream = File.Create(path))
             {

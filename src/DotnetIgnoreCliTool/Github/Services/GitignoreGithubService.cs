@@ -11,7 +11,7 @@ namespace DotnetIgnoreCliTool.Github.Services
 {
     public class GitignoreGithubService : IGitignoreGithubService
     {
-        private const string RepositoryOwner = "gtihub";
+        private const string RepositoryOwner = "github";
         private readonly IGitHubClient _gitHubClient;
         private const string RepositoryName = "gitignore";
         private readonly HttpClient _httpClient;
@@ -33,8 +33,15 @@ namespace DotnetIgnoreCliTool.Github.Services
             IReadOnlyList<RepositoryContent> repositoryContents = await _gitHubClient.Repository.Content.GetAllContents(RepositoryOwner, RepositoryName);
             return repositoryContents
                 .Where(content => content.Type.Value == ContentType.File)
+                .Where(IsGitignoreFile)
                 .Select(content => content.Name)
                 .ToImmutableList();
+        }
+
+        private bool IsGitignoreFile(RepositoryContent content)
+        {
+            const string gitignoreFileName = ".gitignore";
+            return content.Name.EndsWith(gitignoreFileName);
         }
 
         public async Task<GitignoreFile> GetIgnoreFile(string name)
@@ -43,8 +50,7 @@ namespace DotnetIgnoreCliTool.Github.Services
             {
                 var isExactlyEqual = string.Equals(content.Name, name, StringComparison.InvariantCultureIgnoreCase);
 
-                const string gitignoreFileName = ".gitignore";
-                if (!isExactlyEqual && name.Contains(gitignoreFileName))
+                if (!isExactlyEqual && IsGitignoreFile(content))
                 {
                     return content.Name.StartsWith(name, StringComparison.InvariantCultureIgnoreCase);
                 }

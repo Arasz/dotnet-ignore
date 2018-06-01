@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace DotnetIgnoreCliTool.Cli
 {
+    [ArgExceptionBehavior(ArgExceptionPolicy.StandardExceptionHandling)]
     public class CommandLineEntryPoint
     {
         private readonly IOutput _output;
@@ -22,11 +23,11 @@ namespace DotnetIgnoreCliTool.Cli
             _gitignoreFileWriter = new GitignoreFileWritter();
         }
 
-        [HelpHook, ArgShortcut("-?"), ArgDescription("Shows this help")]
+        [HelpHook, ArgShortcut("-?"), ArgDescription("shows help")]
         public bool Help { get; set; }
 
         [ArgActionMethod]
-        [ArgDescription("List all available .gitignore files")]
+        [ArgDescription("list all available .gitignore files")]
         public async Task List()
         {
             IReadOnlyList<string> gitignoreFilesNames = await _githubService.GetAllIgnoreFilesNames();
@@ -38,10 +39,16 @@ namespace DotnetIgnoreCliTool.Cli
         }
 
         [ArgActionMethod]
-        [ArgDescription("Downloads selected gitignore file")]
+        [ArgDescription("downloads selected gitignore file")]
         public async Task Get(GetGitignoreArgs getGitignoreArgs)
         {
             GitignoreFile gitgnoreFile = await _githubService.GetIgnoreFile(getGitignoreArgs.Name);
+
+            if (GitignoreFile.Empty == gitgnoreFile)
+            {
+                throw new ArgException($"Name {getGitignoreArgs.Name} is not correct .gitignore file name");
+            }
+
             await _gitignoreFileWriter.WriteToFileAsync(getGitignoreArgs.Destination, gitgnoreFile.Content);
         }
 
