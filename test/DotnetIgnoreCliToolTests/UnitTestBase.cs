@@ -1,5 +1,4 @@
 ﻿using AutoFixture;
-using AutoFixture.AutoMoq;
 using System;
 
 namespace DotnetIgnoreCliToolTests
@@ -10,8 +9,7 @@ namespace DotnetIgnoreCliToolTests
 
         protected UnitTestBase()
         {
-            Fixture = new Fixture()
-                .Customize(new AutoMoqCustomization { ConfigureMembers = true });
+            Fixture = new Fixture();
         }
 
         public virtual void Dispose()
