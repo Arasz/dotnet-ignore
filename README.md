@@ -2,7 +2,7 @@
 .NET CLI tool that can download .gitignore file from gitignore repository.
 
 ## How to get it?
-From nuget <NUGET_LINK>
+From [nuget](https://www.nuget.org/packages/dotnet-ignore/1.0.0)
 
 ## Installation
 
