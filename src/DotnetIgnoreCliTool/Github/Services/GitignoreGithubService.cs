@@ -12,9 +12,15 @@ namespace DotnetIgnoreCliTool.Github.Services
     public class GitignoreGithubService : IGitignoreGithubService
     {
         private const string RepositoryOwner = "gtihub";
-        private readonly GitHubClient _gitHubClient;
+        private readonly IGitHubClient _gitHubClient;
         private const string RepositoryName = "gitignore";
         private readonly HttpClient _httpClient;
+
+        public GitignoreGithubService(IGitHubClient gitHubClient)
+        {
+            _gitHubClient = gitHubClient ?? throw new ArgumentNullException(nameof(gitHubClient));
+            _httpClient = new HttpClient();
+        }
 
         public GitignoreGithubService()
         {
@@ -46,7 +52,11 @@ namespace DotnetIgnoreCliTool.Github.Services
                 return isExactlyEqual;
             }
 
-            IReadOnlyList<RepositoryContent> repositoryContents = await _gitHubClient.Repository.Content.GetAllContents(RepositoryOwner, RepositoryName);
+            IReadOnlyList<RepositoryContent> repositoryContents = await _gitHubClient
+                .Repository
+                .Content
+                .GetAllContents(RepositoryOwner, RepositoryName);
+
             var gitignoreFile = repositoryContents
                 .FirstOrDefault(content => content.Type.Value == ContentType.File && IsRequestedGitignoreFile(content));
 
