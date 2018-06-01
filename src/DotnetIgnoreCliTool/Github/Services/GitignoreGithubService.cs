@@ -14,6 +14,7 @@ namespace DotnetIgnoreCliTool.Github.Services
         private const string RepositoryOwner = "github";
         private readonly IGitHubClient _gitHubClient;
         private const string RepositoryName = "gitignore";
+        private const string GitignoreFileName = ".gitignore";
         private readonly HttpClient _httpClient;
 
         public GitignoreGithubService(IGitHubClient gitHubClient)
@@ -40,8 +41,7 @@ namespace DotnetIgnoreCliTool.Github.Services
 
         private bool IsGitignoreFile(RepositoryContent content)
         {
-            const string gitignoreFileName = ".gitignore";
-            return content.Name.EndsWith(gitignoreFileName);
+            return content.Name.EndsWith(GitignoreFileName);
         }
 
         public async Task<GitignoreFile> GetIgnoreFile(string name)
@@ -52,7 +52,9 @@ namespace DotnetIgnoreCliTool.Github.Services
 
                 if (!isExactlyEqual && IsGitignoreFile(content))
                 {
-                    return content.Name.StartsWith(name, StringComparison.InvariantCultureIgnoreCase);
+                    return content.Name
+                        .Replace(GitignoreFileName, "")
+                        .Equals(name, StringComparison.InvariantCultureIgnoreCase);
                 }
 
                 return isExactlyEqual;
