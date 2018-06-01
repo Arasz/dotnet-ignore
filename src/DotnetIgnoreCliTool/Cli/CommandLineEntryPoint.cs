@@ -11,7 +11,6 @@ using System.Threading.Tasks;
 
 namespace DotnetIgnoreCliTool.Cli
 {
-    [ArgExceptionBehavior(ArgExceptionPolicy.StandardExceptionHandling)]
     public class CommandLineEntryPoint
     {
         private readonly IOutput _output;
@@ -25,7 +24,7 @@ namespace DotnetIgnoreCliTool.Cli
             _gitignoreFileWriter = new GitignoreFileWritter();
         }
 
-        [HelpHook, ArgShortcut("-?"), ArgDescription("shows help")]
+        [HelpHook, ArgShortcut("-h"), ArgDescription("shows help")]
         public bool Help { get; set; }
 
         [ArgActionMethod]

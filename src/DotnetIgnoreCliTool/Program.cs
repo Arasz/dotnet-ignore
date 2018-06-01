@@ -1,5 +1,6 @@
 ﻿using DotnetIgnoreCliTool.Cli;
 using PowerArgs;
+using System;
 using System.Threading.Tasks;
 
 namespace DotnetIgnoreCliTool
@@ -8,7 +9,18 @@ namespace DotnetIgnoreCliTool
     {
         private static async Task Main(string[] args)
         {
-            await Args.InvokeActionAsync<CommandLineEntryPoint>(args);
+            try
+            {
+                await Args.InvokeActionAsync<CommandLineEntryPoint>(args);
+            }
+            catch (AggregateException e)
+            {
+                Console.WriteLine(e.GetBaseException().Message);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
         }
     }
 }

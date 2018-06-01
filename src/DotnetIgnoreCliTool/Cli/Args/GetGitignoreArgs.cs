@@ -2,11 +2,10 @@
 
 namespace DotnetIgnoreCliTool.Cli.Args
 {
-    [TabCompletion]
     public class GetGitignoreArgs
     {
-        [ArgRequired(PromptIfMissing = true)]
-        [ArgDescription(".gitignore file name case insensitive")]
+        [ArgRequired(PromptIfMissing = false)]
+        [ArgDescription(".gitignore file name case insensitive. Accepts short and full version of the name")]
         [ArgShortcut("-n")]
         [ArgExample("VisualStudio.gitignore", "complete file name")]
         [ArgExample("visualstudio", "only enviroment part of file name")]
