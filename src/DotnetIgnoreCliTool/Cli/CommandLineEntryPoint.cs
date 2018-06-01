@@ -5,6 +5,8 @@ using DotnetIgnoreCliTool.Github.Models;
 using DotnetIgnoreCliTool.Github.Services;
 using PowerArgs;
 using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DotnetIgnoreCliTool.Cli
@@ -28,9 +30,16 @@ namespace DotnetIgnoreCliTool.Cli
 
         [ArgActionMethod]
         [ArgDescription("list all available .gitignore files")]
-        public async Task List()
+        public async Task List(ListGitignoreArgs args)
         {
             IReadOnlyList<string> gitignoreFilesNames = await _githubService.GetAllIgnoreFilesNames();
+
+            if (args.Short)
+            {
+                gitignoreFilesNames = gitignoreFilesNames
+                    .Select(fileName => fileName.Replace(".gitignore", ""))
+                    .ToImmutableList();
+            }
 
             foreach (var gitignoreFileName in gitignoreFilesNames)
             {

@@ -27,10 +27,6 @@
     <PackageReference Include="PowerArgs" Version="3.0.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Cli\Args\" />
-  </ItemGroup>
-
 
 
 </Project>
