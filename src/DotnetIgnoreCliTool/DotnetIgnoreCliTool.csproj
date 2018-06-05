@@ -1,21 +1,28 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+
   <PropertyGroup>
     <OutputType>Exe</OutputType>
+    <IsPackable>true</IsPackable>
+    <PackAsTool>true</PackAsTool>
     <TargetFramework>netcoreapp2.1</TargetFramework>
-    
-    <Authors>Rafał Araszkiewicz</Authors>
-    
-    <AssemblyName>dotnet-ignore</AssemblyName>
+  </PropertyGroup>
 
-      <PackageType>DotnetCliTool</PackageType>
-      <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-      <PackageProjectUrl>https://github.com/Arasz/dotnet-ignore</PackageProjectUrl>
-      <RepositoryUrl>https://github.com/Arasz/dotnet-ignore</RepositoryUrl>
-      <PackageTags>dotnet, cli, dotnet-cli, tool, tools, gitignore, git</PackageTags>
-      <Description>.NET CLI tool that can download .gitignore file from gitignore repository
-</Description>
-      <PackageLicenseUrl>https://github.com/Arasz/dotnet-ignore/blob/master/LICENSE</PackageLicenseUrl>
+
+  <PropertyGroup>
+    <AssemblyName>dotnet-ignore</AssemblyName>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+  </PropertyGroup>
+  
+  <!--Package descriptions-->
+  <PropertyGroup>
+    <Authors>Rafał Araszkiewicz</Authors>
+    <PackageProjectUrl>https://github.com/Arasz/dotnet-ignore</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Arasz/dotnet-ignore</RepositoryUrl>
+    <PackageTags>dotnet, cli, dotnet-cli, tool, tools, gitignore, git</PackageTags>
+    <Description>.NET CLI tool that can download .gitignore file from gitignore repository</Description>
+    <PackageLicenseUrl>https://github.com/Arasz/dotnet-ignore/blob/master/LICENSE</PackageLicenseUrl>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -23,7 +30,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <LangVersion>7.3</LangVersion>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
