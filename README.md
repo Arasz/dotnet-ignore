@@ -10,7 +10,7 @@ From [nuget](https://www.nuget.org/packages/dotnet-ignore/1.0.0)
 
 Execute 
 ```
-dotnet tool install -g <PACKAGE_ID>
+dotnet tool install -g dotnet-ignore
 ```
 
 ### Local
