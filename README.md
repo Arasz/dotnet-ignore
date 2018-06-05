@@ -19,7 +19,7 @@ Add to your .csproj file
 
 ```
 <ItemGroup>
-	<DotNetCliToolReference Include="DotNetIgnore" Version="*" />
+	<DotNetCliToolReference Include="dotnet-ignore" Version="*" />
 </ItemGroup>
 ```
 
@@ -28,7 +28,7 @@ Add to your .csproj file
 Just run
 
 ```
-dotnet ignore
+dotnet ignore -h
 ```
 
 to see complete description of usage.
