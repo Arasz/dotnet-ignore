@@ -8,15 +8,13 @@ using System.Threading.Tasks;
 
 namespace DotnetIgnoreCliTool.Cli.Commands
 {
-    public class GitignoreGetCommandHandler : ICommandHandler
+    public sealed class GitignoreGetCommandHandler : CommandLineApplicationBase, ICommandHandler
     {
         private const string CommandName = "get";
 
-        [Argument(0, Description = ".gitignore file name case insensitive. Accepts short and full version of the name", ShowInHelpText = true)]
-        public string Name { get; set; }
+        public CommandOption NameOption { get; set; }
 
-        [Argument(1, Description = "Destination directory where gitignore will be saved. If not provided execution directory will be used", ShowInHelpText = true)]
-        public string Destination { get; set; }
+        public CommandOption DestinationOption { get; set; }
 
         private readonly IGitignoreGithubService _githubService;
         private readonly IGitignoreFileWriter _gitignoreFileWriter;
@@ -25,20 +23,37 @@ namespace DotnetIgnoreCliTool.Cli.Commands
         {
             _githubService = githubService ?? throw new ArgumentNullException(nameof(githubService));
             _gitignoreFileWriter = gitignoreFileWriter ?? throw new ArgumentNullException(nameof(gitignoreFileWriter));
+
+            ConfigureCommandLineApplication();
         }
 
-        public bool CanHandle(string command) => string.Equals(CommandName, command, StringComparison.InvariantCultureIgnoreCase);
-
-        public async Task ExecuteAsync()
+        protected override void ConfigureCommandLineApplication()
         {
-            GitignoreFile gitgnoreFile = await _githubService.GetIgnoreFile(Name);
+            Name = CommandName;
+            NameOption = Option("-n | --name",
+                ".gitignore file name case insensitive. Accepts short and full version of the name",
+                CommandOptionType.SingleValue,
+                option => { option.IsRequired(); });
+
+            DestinationOption = Option("-d | --destination",
+                "Destination directory where gitignore will be saved. If not provided execution directory will be used",
+                CommandOptionType.SingleValue);
+
+            OnExecute((Func<Task<int>>)HandleCommandAsync);
+        }
+
+        public async Task<int> HandleCommandAsync()
+        {
+            GitignoreFile gitgnoreFile = await _githubService.GetIgnoreFile(NameOption.Value());
 
             if (GitignoreFile.Empty == gitgnoreFile)
             {
-                throw new ArgException($"Name {Name} is not correct .gitignore file name");
+                throw new ArgException($"Name {NameOption.Value()} is not correct .gitignore file name");
             }
 
-            await _gitignoreFileWriter.WriteToFileAsync(Destination, gitgnoreFile.Content);
+            await _gitignoreFileWriter.WriteToFileAsync(DestinationOption.Value(), gitgnoreFile.Content);
+
+            return 0;
         }
     }
 }

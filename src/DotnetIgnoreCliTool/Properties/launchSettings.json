@@ -2,7 +2,7 @@
   "profiles": {
     "DotnetIgnoreCliTool": {
       "commandName": "Project",
-      "commandLineArgs": "get -n maven"
+      "commandLineArgs": "get --help"
     }
   }
 }

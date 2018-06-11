@@ -8,10 +8,9 @@ using System.Threading.Tasks;
 
 namespace DotnetIgnoreCliTool.Cli.Commands
 {
-    public class GitignoreListCommandHandler : ICommandHandler
+    public sealed class GitignoreListCommandHandler : CommandLineApplicationBase, ICommandHandler
     {
-        [Option(CommandOptionType.NoValue, Description = "Prints files names without .gitignore")]
-        public string Short { get; set; }
+        public CommandOption ShortOption { get; set; }
 
         private readonly IGitignoreGithubService _githubService;
         private readonly IConsole _console;
@@ -20,17 +19,22 @@ namespace DotnetIgnoreCliTool.Cli.Commands
         {
             _githubService = githubService ?? throw new ArgumentNullException(nameof(githubService));
             _console = console ?? throw new ArgumentNullException(nameof(console));
+
+            ConfigureCommandLineApplication();
         }
 
-        public bool CanHandle(string command) => string.Equals(CommandName, command, StringComparison.InvariantCultureIgnoreCase);
+        protected override void ConfigureCommandLineApplication()
+        {
+            Name = CommandName;
+            ShortOption = Option("-s | --short", "Prints files names without .gitignore", CommandOptionType.NoValue);
+            OnExecute((Func<Task<int>>)HandleCommandAsync);
+        }
 
-        public const string CommandName = "list";
-
-        public async Task ExecuteAsync()
+        public async Task<int> HandleCommandAsync()
         {
             IReadOnlyList<string> gitignoreFilesNames = await _githubService.GetAllIgnoreFilesNames();
 
-            if (!string.IsNullOrEmpty(Short))
+            if (ShortOption.HasValue())
             {
                 gitignoreFilesNames = gitignoreFilesNames
                     .Select(fileName => fileName.Replace(".gitignore", ""))
@@ -41,6 +45,10 @@ namespace DotnetIgnoreCliTool.Cli.Commands
             {
                 _console.WriteLine($"- {gitignoreFileName}");
             }
+
+            return 0;
         }
+
+        public const string CommandName = "list";
     }
 }
