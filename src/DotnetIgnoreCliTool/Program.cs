@@ -1,25 +1,42 @@
 ﻿using DotnetIgnoreCliTool.Cli;
-using PowerArgs;
+using DotnetIgnoreCliTool.Cli.Commands;
+using DotnetIgnoreCliTool.Cli.Commands.Get;
+using DotnetIgnoreCliTool.Cli.Commands.List;
+using DotnetIgnoreCliTool.Cli.Execution;
+using DotnetIgnoreCliTool.Cli.FIles;
+using DotnetIgnoreCliTool.Github.Services;
+using McMaster.Extensions.CommandLineUtils;
+using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Threading.Tasks;
 
 namespace DotnetIgnoreCliTool
 {
     internal class Program
     {
-        private static async Task Main(string[] args)
+        public static int Main(string[] args)
         {
+            var servicesProvider = new ServiceCollection()
+                .AddSingleton<CommandLineApplication, GitignoreGetCommand>()
+                .AddSingleton<IApplicationCommandHandler<GitignoreGetCommand>, GitignoreGetCommandHandler>()
+                .AddSingleton<CommandLineApplication, GitignoreListCommand>()
+                .AddSingleton<IApplicationCommandHandler<GitignoreListCommand>, GitignoreListCommandHandler>()
+                .AddSingleton<IApplicationCommandExecutor, ApplicationCommandsExecutor>()
+                .AddSingleton<IGitignoreGithubService, GitignoreGithubService>()
+                .AddSingleton<IGitignoreFileWriter, GitignoreFileWritter>()
+                .AddSingleton<IConsole, PhysicalConsole>()
+                .BuildServiceProvider();
+
+            var executor = servicesProvider.GetRequiredService<IApplicationCommandExecutor>();
+            var console = servicesProvider.GetRequiredService<IConsole>();
+
             try
             {
-                await Args.InvokeActionAsync<CommandLineEntryPoint>(args);
-            }
-            catch (AggregateException e)
-            {
-                Console.WriteLine(e.GetBaseException().Message);
+                return executor.Execute(args);
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                console.WriteLine(e.Message);
+                return ReturnCodes.Error;
             }
         }
     }

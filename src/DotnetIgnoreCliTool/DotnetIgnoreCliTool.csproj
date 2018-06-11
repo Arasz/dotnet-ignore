@@ -23,7 +23,7 @@
     <PackageTags>dotnet, cli, dotnet-cli, tool, tools, gitignore, git</PackageTags>
     <Description>.NET CLI tool that can download .gitignore file from gitignore repository</Description>
     <PackageLicenseUrl>https://github.com/Arasz/dotnet-ignore/blob/master/LICENSE</PackageLicenseUrl>
-    <Version>1.0.2</Version>
+    <Version>1.0.3</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -35,8 +35,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="2.2.4" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.1.0" />
     <PackageReference Include="Octokit" Version="0.29.0" />
     <PackageReference Include="PowerArgs" Version="3.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="FluentAssertions">
+      <HintPath>..\..\..\..\Users\arasz\.nuget\packages\fluentassertions\5.3.2\lib\netstandard2.0\FluentAssertions.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 
