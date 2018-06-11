@@ -6,12 +6,10 @@ using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DotnetIgnoreCliTool.Cli.Commands
+namespace DotnetIgnoreCliTool.Cli.Commands.List
 {
-    public sealed class GitignoreListCommandHandler : CommandLineApplicationBase, ICommandHandler
+    public class GitignoreListCommandHandler : IApplicationCommandHandler<GitignoreListCommand>
     {
-        public CommandOption ShortOption { get; set; }
-
         private readonly IGitignoreGithubService _githubService;
         private readonly IConsole _console;
 
@@ -19,22 +17,13 @@ namespace DotnetIgnoreCliTool.Cli.Commands
         {
             _githubService = githubService ?? throw new ArgumentNullException(nameof(githubService));
             _console = console ?? throw new ArgumentNullException(nameof(console));
-
-            ConfigureCommandLineApplication();
         }
 
-        protected override void ConfigureCommandLineApplication()
-        {
-            Name = CommandName;
-            ShortOption = Option("-s | --short", "Prints files names without .gitignore", CommandOptionType.NoValue);
-            OnExecute((Func<Task<int>>)HandleCommandAsync);
-        }
-
-        public async Task<int> HandleCommandAsync()
+        public async Task<int> HandleCommandAsync(GitignoreListCommand command)
         {
             IReadOnlyList<string> gitignoreFilesNames = await _githubService.GetAllIgnoreFilesNames();
 
-            if (ShortOption.HasValue())
+            if (command.ShortOption.HasValue())
             {
                 gitignoreFilesNames = gitignoreFilesNames
                     .Select(fileName => fileName.Replace(".gitignore", ""))
@@ -46,9 +35,7 @@ namespace DotnetIgnoreCliTool.Cli.Commands
                 _console.WriteLine($"- {gitignoreFileName}");
             }
 
-            return 0;
+            return ReturnCodes.Success;
         }
-
-        public const string CommandName = "list";
     }
 }

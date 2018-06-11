@@ -1,4 +1,7 @@
-﻿using DotnetIgnoreCliTool.Cli.Commands;
+﻿using DotnetIgnoreCliTool.Cli;
+using DotnetIgnoreCliTool.Cli.Commands;
+using DotnetIgnoreCliTool.Cli.Commands.Get;
+using DotnetIgnoreCliTool.Cli.Commands.List;
 using DotnetIgnoreCliTool.Cli.Execution;
 using DotnetIgnoreCliTool.Cli.FIles;
 using DotnetIgnoreCliTool.Github.Services;
@@ -13,23 +16,28 @@ namespace DotnetIgnoreCliTool
         public static int Main(string[] args)
         {
             var servicesProvider = new ServiceCollection()
-                .AddSingleton<ICommandHandler, GitignoreGetCommandHandler>()
-                .AddSingleton<ICommandHandler, GitignoreListCommandHandler>()
-                .AddSingleton<ICommandHandlerExecutor, CommandHandlerExecutor>()
+                .AddSingleton<CommandLineApplication, GitignoreGetCommand>()
+                .AddSingleton<IApplicationCommandHandler<GitignoreGetCommand>, GitignoreGetCommandHandler>()
+                .AddSingleton<CommandLineApplication, GitignoreListCommand>()
+                .AddSingleton<IApplicationCommandHandler<GitignoreListCommand>, GitignoreListCommandHandler>()
+                .AddSingleton<IApplicationCommandExecutor, ApplicationCommandsExecutor>()
                 .AddSingleton<IGitignoreGithubService, GitignoreGithubService>()
                 .AddSingleton<IGitignoreFileWriter, GitignoreFileWritter>()
                 .AddSingleton<IConsole, PhysicalConsole>()
                 .BuildServiceProvider();
 
-            return RunCommandsWithExecutor(args, servicesProvider.GetRequiredService<ICommandHandlerExecutor>());
-        }
+            var executor = servicesProvider.GetRequiredService<IApplicationCommandExecutor>();
+            var console = servicesProvider.GetRequiredService<IConsole>();
 
-        private static int RunCommandsWithExecutor(string[] args, ICommandHandlerExecutor executor)
-        {
-            if (executor == null)
-                throw new ArgumentNullException(nameof(executor));
-
-            return executor.Execute(args);
+            try
+            {
+                return executor.Execute(args);
+            }
+            catch (Exception e)
+            {
+                console.WriteLine(e.Message);
+                return ReturnCodes.Error;
+            }
         }
     }
 }

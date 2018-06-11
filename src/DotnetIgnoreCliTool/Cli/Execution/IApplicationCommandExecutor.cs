@@ -1,6 +1,6 @@
 ﻿namespace DotnetIgnoreCliTool.Cli.Execution
 {
-    public interface ICommandHandlerExecutor
+    public interface IApplicationCommandExecutor
     {
         int Execute(string[] args);
     }
