@@ -24,6 +24,8 @@ namespace DotnetIgnoreCliTool.Cli.Execution
             Commands.AddRange(_handlers.Cast<CommandLineApplication>());
 
             Conventions.UseDefaultConventions();
+
+            ThrowOnUnexpectedArgument = false;
         }
 
         int ICommandHandlerExecutor.Execute(string[] args)
