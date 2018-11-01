@@ -41,12 +41,4 @@
     <PackageReference Include="PowerArgs" Version="3.0.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="FluentAssertions">
-      <HintPath>..\..\..\..\Users\arasz\.nuget\packages\fluentassertions\5.3.2\lib\netstandard2.0\FluentAssertions.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
-
-
 </Project>
