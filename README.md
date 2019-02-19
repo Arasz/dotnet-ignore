@@ -1,4 +1,6 @@
 # dotnet-ignore
+[![Build status](https://arasz.visualstudio.com/dotnet-ignore/_apis/build/status/Build%20and%20push)](https://arasz.visualstudio.com/dotnet-ignore/_build/latest?definitionId=3)
+
 Global .NET Core tool that can download .gitignore file from github gitignore repository.
 
 ## How to get it?
