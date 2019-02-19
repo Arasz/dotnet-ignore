@@ -13,7 +13,7 @@ namespace DotnetIgnoreCliToolTests
         [Fact]
         public async Task GetRepositoryShouldReturnRequestedGitReposiotry()
         {
-            //Arange
+            //Arrange
             var repositoryOwner = "github";
             var gitHubClient = new GitHubClient(new ProductHeaderValue("dotnet-ignore"));
             var repositoryName = "gitignore";
@@ -31,7 +31,7 @@ namespace DotnetIgnoreCliToolTests
         [Fact]
         public async Task GetAllRepositoryContentsShouldReturnAllContentInRepository()
         {
-            //Arange
+            //Arrange
             var repositoryOwner = "github";
             var gitHubClient = new GitHubClient(new ProductHeaderValue("dotnet-ignore"));
             var repositoryName = "gitignore";
@@ -48,7 +48,7 @@ namespace DotnetIgnoreCliToolTests
         [Fact]
         public async Task RepositoryContentObjectShouldAllowDownloadGitignoreFile()
         {
-            //Arange
+            //Arrange
             var repositoryOwner = "github";
             var gitHubClient = new GitHubClient(new ProductHeaderValue("dotnet-ignore"));
             var repositoryName = "gitignore";
@@ -73,7 +73,7 @@ namespace DotnetIgnoreCliToolTests
         [Fact]
         public async Task RepositoryContentObjectWithSpecifiedContentPathShouldHaveExpectedName()
         {
-            //Arange
+            //Arrange
             var repositoryOwner = "github";
             var gitHubClient = new GitHubClient(new ProductHeaderValue("dotnet-ignore"));
             var repositoryName = "gitignore";
