@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace DotnetIgnoreCliTool.Cli.FIles
+namespace DotnetIgnoreCliTool.Cli.Files
 {
     public interface IGitignoreFileWriter
     {

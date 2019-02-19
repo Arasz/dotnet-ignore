@@ -3,7 +3,7 @@ using DotnetIgnoreCliTool.Cli.Commands;
 using DotnetIgnoreCliTool.Cli.Commands.Get;
 using DotnetIgnoreCliTool.Cli.Commands.List;
 using DotnetIgnoreCliTool.Cli.Execution;
-using DotnetIgnoreCliTool.Cli.FIles;
+using DotnetIgnoreCliTool.Cli.Files;
 using DotnetIgnoreCliTool.Github.Services;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,7 +22,7 @@ namespace DotnetIgnoreCliTool
                 .AddSingleton<IApplicationCommandHandler<GitignoreListCommand>, GitignoreListCommandHandler>()
                 .AddSingleton<IApplicationCommandExecutor, ApplicationCommandsExecutor>()
                 .AddSingleton<IGitignoreGithubService, GitignoreGithubService>()
-                .AddSingleton<IGitignoreFileWriter, GitignoreFileWritter>()
+                .AddSingleton<IGitignoreFileWriter, GitignoreFileWriter>()
                 .AddSingleton<IConsole, PhysicalConsole>()
                 .BuildServiceProvider();
 
