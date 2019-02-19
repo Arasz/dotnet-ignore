@@ -2,9 +2,9 @@
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DotnetIgnoreCliTool.Cli.FIles
+namespace DotnetIgnoreCliTool.Cli.Files
 {
-    public class GitignoreFileWritter : IGitignoreFileWriter
+    public class GitignoreFileWriter : IGitignoreFileWriter
     {
         private const string GitignoreFileName = ".gitignore";
 

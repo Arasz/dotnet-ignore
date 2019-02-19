@@ -1,4 +1,4 @@
-﻿using DotnetIgnoreCliTool.Cli.FIles;
+﻿using DotnetIgnoreCliTool.Cli.Files;
 using DotnetIgnoreCliTool.Github.Models;
 using DotnetIgnoreCliTool.Github.Services;
 using PowerArgs;
@@ -20,14 +20,14 @@ namespace DotnetIgnoreCliTool.Cli.Commands.Get
 
         public async Task<int> HandleCommandAsync(GitignoreGetCommand command)
         {
-            GitignoreFile gitgnoreFile = await _githubService.GetIgnoreFile(command.NameOption.Value());
+            GitignoreFile gitIgnoreFile = await _githubService.GetIgnoreFile(command.NameOption.Value());
 
-            if (GitignoreFile.Empty == gitgnoreFile)
+            if (GitignoreFile.Empty == gitIgnoreFile)
             {
                 throw new ArgException($"Name {command.NameOption.Value()} is not correct .gitignore file name");
             }
 
-            await _gitignoreFileWriter.WriteToFileAsync(command.DestinationOption.Value(), gitgnoreFile.Content);
+            await _gitignoreFileWriter.WriteToFileAsync(command.DestinationOption.Value(), gitIgnoreFile.Content);
 
             return ReturnCodes.Success;
         }
