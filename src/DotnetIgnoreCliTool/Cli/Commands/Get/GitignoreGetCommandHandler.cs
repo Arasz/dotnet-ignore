@@ -20,14 +20,16 @@ namespace DotnetIgnoreCliTool.Cli.Commands.Get
 
         public async Task<int> HandleCommandAsync(GitignoreGetCommand command)
         {
-            GitignoreFile gitIgnoreFile = await _githubService.GetIgnoreFile(command.NameOption.Value());
+            var names = command.NamesOption.Value();
+            var gitIgnoreFile = await _githubService.GetIgnoreFile(names);
 
             if (GitignoreFile.Empty == gitIgnoreFile)
             {
-                throw new ArgException($"Name {command.NameOption.Value()} is not correct .gitignore file name");
+                throw new ArgException($"Name {names} is not correct .gitignore file name");
             }
 
-            await _gitignoreFileWriter.WriteToFileAsync(command.DestinationOption.Value(), gitIgnoreFile.Content);
+            var destination = command.DestinationOption.Value();
+            await _gitignoreFileWriter.WriteToFileAsync(destination, gitIgnoreFile.Content);
 
             return ReturnCodes.Success;
         }
