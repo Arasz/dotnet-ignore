@@ -8,6 +8,8 @@ using DotnetIgnoreCliTool.Github.Services;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using DotnetIgnoreCliTool.Cli.Commands.Get.Merge;
+using DotnetIgnoreCliTool.Cli.Commands.Get.Split;
 
 namespace DotnetIgnoreCliTool
 {
@@ -16,15 +18,17 @@ namespace DotnetIgnoreCliTool
         public static int Main(string[] args)
         {
             var servicesProvider = new ServiceCollection()
-                .AddSingleton<CommandLineApplication, GitignoreGetCommand>()
-                .AddSingleton<IApplicationCommandHandler<GitignoreGetCommand>, GitignoreGetCommandHandler>()
-                .AddSingleton<CommandLineApplication, GitignoreListCommand>()
-                .AddSingleton<IApplicationCommandHandler<GitignoreListCommand>, GitignoreListCommandHandler>()
-                .AddSingleton<IApplicationCommandExecutor, ApplicationCommandsExecutor>()
-                .AddSingleton<IGitignoreGithubService, GitignoreGithubService>()
-                .AddSingleton<IGitignoreFileWriter, GitignoreFileWriter>()
-                .AddSingleton<IConsole, PhysicalConsole>()
-                .BuildServiceProvider();
+               .AddSingleton<CommandLineApplication, GitignoreGetCommand>()
+               .AddSingleton<IApplicationCommandHandler<GitignoreGetCommand>, GitignoreGetCommandHandler>()
+               .AddSingleton<CommandLineApplication, GitignoreListCommand>()
+               .AddSingleton<IApplicationCommandHandler<GitignoreListCommand>, GitignoreListCommandHandler>()
+               .AddSingleton<IApplicationCommandExecutor, ApplicationCommandsExecutor>()
+               .AddSingleton<IGitignoreGithubService, GitignoreGithubService>()
+               .AddSingleton<IGitignoreFileWriter, GitignoreFileWriter>()
+               .AddSingleton<IConsole, PhysicalConsole>()
+               .AddSingleton<IFileNameSpliter, DefaultFileNameSpliter>()
+               .AddSingleton<IGitIgnoreFileMerger, SimpleGitIgnoreFileMerger>()
+               .BuildServiceProvider();
 
             var executor = servicesProvider.GetRequiredService<IApplicationCommandExecutor>();
             var console = servicesProvider.GetRequiredService<IConsole>();
