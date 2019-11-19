@@ -12,7 +12,8 @@ namespace DotnetIgnoreCliTool.Cli.Commands.Get
         private readonly IGitignoreGithubService _githubService;
         private readonly IGitignoreFileWriter _gitignoreFileWriter;
 
-        public GitignoreGetCommandHandler(IGitignoreGithubService githubService, IGitignoreFileWriter gitignoreFileWriter)
+        public GitignoreGetCommandHandler(IGitignoreGithubService githubService,
+            IGitignoreFileWriter gitignoreFileWriter)
         {
             _githubService = githubService ?? throw new ArgumentNullException(nameof(githubService));
             _gitignoreFileWriter = gitignoreFileWriter ?? throw new ArgumentNullException(nameof(gitignoreFileWriter));
@@ -29,7 +30,15 @@ namespace DotnetIgnoreCliTool.Cli.Commands.Get
             }
 
             var destination = command.DestinationOption.Value();
-            await _gitignoreFileWriter.WriteToFileAsync(destination, gitIgnoreFile.Content);
+            try
+            {
+                await _gitignoreFileWriter.WriteToFileAsync(destination, gitIgnoreFile.Content);
+            }
+            catch (Exception e)
+            {
+                throw new ArgException($"Destination path {destination} is invalid or there were " +
+                                       "problem with file access", e);
+            }
 
             return ReturnCodes.Success;
         }
