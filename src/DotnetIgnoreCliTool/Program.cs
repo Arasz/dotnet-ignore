@@ -23,7 +23,7 @@ namespace DotnetIgnoreCliTool
                .AddSingleton<CommandLineApplication, GitignoreListCommand>()
                .AddSingleton<IApplicationCommandHandler<GitignoreListCommand>, GitignoreListCommandHandler>()
                .AddSingleton<IApplicationCommandExecutor, ApplicationCommandsExecutor>()
-               .AddSingleton<IGitignoreService, GitignoreService>()
+               .AddSingleton<IGitignoreService, GithubGitignoreService>()
                .AddSingleton<IGitignoreFileWriter, GitignoreFileWriter>()
                .AddSingleton<IConsole, PhysicalConsole>()
                .AddSingleton<IConcatedNamesProcessor, ConcatedNamesProcessor>()

@@ -13,17 +13,17 @@ namespace DotnetIgnoreCliTool.Cli.Commands.Get
 {
     public class GitignoreGetCommandHandler : IApplicationCommandHandler<GitignoreGetCommand>
     {
-        private readonly IGitignoreService _service;
+        private readonly IGitignoreService _gitignoreService;
         private readonly IConcatedNamesProcessor _concatedNamesProcessor;
         private readonly IMergeStrategy _mergeStrategy;
         private readonly IGitignoreFileWriter _gitignoreFileWriter;
 
-        public GitignoreGetCommandHandler(IGitignoreService service,
+        public GitignoreGetCommandHandler(IGitignoreService gitignoreService,
             IConcatedNamesProcessor concatedNamesProcessor,
             IMergeStrategy mergeStrategy,
             IGitignoreFileWriter gitignoreFileWriter)
         {
-            _service = service ?? throw new ArgumentNullException(nameof(service));
+            _gitignoreService = gitignoreService ?? throw new ArgumentNullException(nameof(gitignoreService));
             _concatedNamesProcessor = concatedNamesProcessor ?? throw new ArgumentNullException(nameof(concatedNamesProcessor));
             _mergeStrategy = mergeStrategy ?? throw new ArgumentNullException(nameof(mergeStrategy));
             _gitignoreFileWriter = gitignoreFileWriter ?? throw new ArgumentNullException(nameof(gitignoreFileWriter));
@@ -54,7 +54,7 @@ namespace DotnetIgnoreCliTool.Cli.Commands.Get
         private async Task<GitignoreFile[]> DownloadAllGitIgnoreFiles(IEnumerable<string> names)
         {
             var gitIgnoreFilesTasks = names
-               .Select(name => _service.GetIgnoreFile(name))
+               .Select(name => _gitignoreService.GetIgnoreFile(name))
                .ToArray();
 
             await Task.WhenAll(gitIgnoreFilesTasks);
