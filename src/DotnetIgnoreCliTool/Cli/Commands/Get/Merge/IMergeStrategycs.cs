@@ -3,7 +3,7 @@ using DotnetIgnoreCliTool.Github.Models;
 
 namespace DotnetIgnoreCliTool.Cli.Commands.Get.Merge
 {
-    public interface IGitIgnoreFileMerger
+    public interface IMergeStrategy
     {
         GitignoreFile Merge(IReadOnlyCollection<GitignoreFile> gitignoreFiles);
     }

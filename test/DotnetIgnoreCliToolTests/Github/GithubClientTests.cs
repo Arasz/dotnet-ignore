@@ -1,12 +1,11 @@
-﻿using FluentAssertions;
-using Octokit;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using FluentAssertions;
+using Octokit;
 using Xunit;
 
-namespace DotnetIgnoreCliToolTests
+namespace DotnetIgnoreCliToolTests.Github
 {
     public class GithubClientTests : UnitTestBase
     {

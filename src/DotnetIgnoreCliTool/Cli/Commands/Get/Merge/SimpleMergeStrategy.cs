@@ -6,7 +6,7 @@ using DotnetIgnoreCliTool.Github.Models;
 
 namespace DotnetIgnoreCliTool.Cli.Commands.Get.Merge
 {
-    public sealed class SimpleGitIgnoreFileMerger : IGitIgnoreFileMerger
+    public sealed class SimpleMergeStrategy : IMergeStrategy
     {
         private const string MergedFileName = "merged.gitignore";
 

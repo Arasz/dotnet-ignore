@@ -15,17 +15,17 @@ namespace DotnetIgnoreCliTool.Cli.Commands.Get
     {
         private readonly IGitignoreGithubService _githubService;
         private readonly IFileNameSpliter _fileNameSpliter;
-        private readonly IGitIgnoreFileMerger _gitIgnoreFileMerger;
+        private readonly IMergeStrategy _mergeStrategy;
         private readonly IGitignoreFileWriter _gitignoreFileWriter;
 
         public GitignoreGetCommandHandler(IGitignoreGithubService githubService,
             IFileNameSpliter fileNameSpliter,
-            IGitIgnoreFileMerger gitIgnoreFileMerger,
+            IMergeStrategy mergeStrategy,
             IGitignoreFileWriter gitignoreFileWriter)
         {
             _githubService = githubService ?? throw new ArgumentNullException(nameof(githubService));
             _fileNameSpliter = fileNameSpliter ?? throw new ArgumentNullException(nameof(fileNameSpliter));
-            _gitIgnoreFileMerger = gitIgnoreFileMerger ?? throw new ArgumentNullException(nameof(gitIgnoreFileMerger));
+            _mergeStrategy = mergeStrategy ?? throw new ArgumentNullException(nameof(mergeStrategy));
             _gitignoreFileWriter = gitignoreFileWriter ?? throw new ArgumentNullException(nameof(gitignoreFileWriter));
         }
 
@@ -48,7 +48,7 @@ namespace DotnetIgnoreCliTool.Cli.Commands.Get
 
             EnsureAllGitIgnoreFilesWhereDownloaded(gitIgnoreFiles, names);
 
-            return _gitIgnoreFileMerger.Merge(gitIgnoreFiles);
+            return _mergeStrategy.Merge(gitIgnoreFiles);
         }
 
         private async Task<GitignoreFile[]> DownloadAllGitIgnoreFiles(IEnumerable<string> names)

@@ -27,7 +27,7 @@ namespace DotnetIgnoreCliTool
                .AddSingleton<IGitignoreFileWriter, GitignoreFileWriter>()
                .AddSingleton<IConsole, PhysicalConsole>()
                .AddSingleton<IFileNameSpliter, DefaultFileNameSpliter>()
-               .AddSingleton<IGitIgnoreFileMerger, SimpleGitIgnoreFileMerger>()
+               .AddSingleton<IMergeStrategy, SimpleMergeStrategy>()
                .BuildServiceProvider();
 
             var executor = servicesProvider.GetRequiredService<IApplicationCommandExecutor>();
