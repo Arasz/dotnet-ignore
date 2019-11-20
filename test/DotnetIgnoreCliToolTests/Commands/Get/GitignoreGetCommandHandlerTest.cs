@@ -52,10 +52,10 @@ namespace DotnetIgnoreCliToolTests.Commands.Get
         public async Task HandleShouldWriteMergedGitignoreFileWhenCalledWithMultipleNames()
         {
             // Arrange
-            const string gitignoreFilenames = "test.gitignore,test2.gitignore";
+            const string gitignoreFilenames = "test.gitignore,test2.gitignore"; // Separator as in split stub
             const string gitignoreContent = "test content # ./[*]";
             const string destination = "C:/test";
-            const string expectedContent = gitignoreContent + gitignoreContent;
+            const string expectedContent = gitignoreContent + gitignoreContent; // As in merge stub
 
             var githubServiceStub = new GithubServiceStub(gitignoreContent);
 
