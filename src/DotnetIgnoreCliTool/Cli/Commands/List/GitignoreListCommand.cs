@@ -21,10 +21,18 @@ namespace DotnetIgnoreCliTool.Cli.Commands.List
         private void ConfigureCommandLineApplication()
         {
             Name = CommandName;
-            ShortOption = Option("-s | --short", "Prints files names without .gitignore", CommandOptionType.NoValue);
+            ShortOption = CreateShortOption();
+            
             OnExecute(() => _commandHandler.HandleCommandAsync(this));
 
             ThrowOnUnexpectedArgument = false;
+        }
+
+        private CommandOption CreateShortOption()
+        {
+            const string description = "Prints files names without .gitignore";
+            
+            return Option("-s | --short", description, CommandOptionType.NoValue);
         }
     }
 }

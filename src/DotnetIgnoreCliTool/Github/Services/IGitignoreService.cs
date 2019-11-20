@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace DotnetIgnoreCliTool.Github.Services
 {
-    public interface IGitignoreGithubService
+    public interface IGitignoreService
     {
         Task<IReadOnlyList<string>> GetAllIgnoreFilesNames();
 

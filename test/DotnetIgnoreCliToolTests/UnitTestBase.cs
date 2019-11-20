@@ -5,7 +5,7 @@ namespace DotnetIgnoreCliToolTests
 {
     public abstract class UnitTestBase : IDisposable
     {
-        public IFixture Fixture { get; }
+        protected IFixture Fixture { get; }
 
         protected UnitTestBase()
         {

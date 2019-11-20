@@ -1,17 +1,16 @@
-﻿using FluentAssertions;
-using Octokit;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using FluentAssertions;
+using Octokit;
 using Xunit;
 
-namespace DotnetIgnoreCliToolTests
+namespace DotnetIgnoreCliToolTests.Github
 {
     public class GithubClientTests : UnitTestBase
     {
         [Fact]
-        public async Task GetRepositoryShouldReturnRequestedGitReposiotry()
+        public async Task GetRepositoryShouldReturnRequestedGitRepository()
         {
             //Arrange
             var repositoryOwner = "github";
@@ -19,7 +18,7 @@ namespace DotnetIgnoreCliToolTests
             var repositoryName = "gitignore";
 
             //Act
-            Repository repository = await gitHubClient.Repository.Get(repositoryOwner, repositoryName);
+            var repository = await gitHubClient.Repository.Get(repositoryOwner, repositoryName);
 
             //Assert
 
@@ -37,7 +36,7 @@ namespace DotnetIgnoreCliToolTests
             var repositoryName = "gitignore";
 
             //Act
-            IReadOnlyList<RepositoryContent> repositoryContents = await gitHubClient.Repository.Content.GetAllContents(repositoryOwner, repositoryName);
+            var repositoryContents = await gitHubClient.Repository.Content.GetAllContents(repositoryOwner, repositoryName);
 
             //Assert
             repositoryContents
@@ -55,12 +54,12 @@ namespace DotnetIgnoreCliToolTests
             var httpClient = new HttpClient();
 
             //Act
-            IReadOnlyList<RepositoryContent> repositoryContents = await gitHubClient.Repository.Content.GetAllContents(repositoryOwner, repositoryName);
-            RepositoryContent firstFile = repositoryContents
+            var repositoryContents = await gitHubClient.Repository.Content.GetAllContents(repositoryOwner, repositoryName);
+            var firstFile = repositoryContents
                 .First(content => content.Type.Value == ContentType.File);
 
-            HttpResponseMessage fileDownloadResponse = await httpClient.GetAsync(firstFile.DownloadUrl);
-            string gitignoreFileContent = await fileDownloadResponse
+            var fileDownloadResponse = await httpClient.GetAsync(firstFile.DownloadUrl);
+            var gitignoreFileContent = await fileDownloadResponse
                 .Content
                 .ReadAsStringAsync();
 
@@ -80,8 +79,8 @@ namespace DotnetIgnoreCliToolTests
             var expectedFileName = "CUDA.gitignore";
 
             //Act
-            IReadOnlyList<RepositoryContent> repositoryContents = await gitHubClient.Repository.Content.GetAllContents(repositoryOwner, repositoryName);
-            RepositoryContent firstFile = repositoryContents
+            var repositoryContents = await gitHubClient.Repository.Content.GetAllContents(repositoryOwner, repositoryName);
+            var firstFile = repositoryContents
                 .First(content => content.Type.Value == ContentType.File && content.Name == expectedFileName);
 
             //Assert
