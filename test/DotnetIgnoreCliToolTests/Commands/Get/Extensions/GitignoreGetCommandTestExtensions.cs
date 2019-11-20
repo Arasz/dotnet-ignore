@@ -1,6 +1,6 @@
 using DotnetIgnoreCliTool.Cli.Commands.Get;
 
-namespace DotnetIgnoreCliToolTests.Commands.Get
+namespace DotnetIgnoreCliToolTests.Commands.Get.Extensions
 {
     public static class GitignoreGetCommandTestExtensions
     {

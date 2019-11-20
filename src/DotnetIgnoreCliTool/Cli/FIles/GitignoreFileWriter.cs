@@ -2,7 +2,7 @@
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DotnetIgnoreCliTool.Cli.Files
+namespace DotnetIgnoreCliTool.Cli.FIles
 {
     public class GitignoreFileWriter : IGitignoreFileWriter
     {

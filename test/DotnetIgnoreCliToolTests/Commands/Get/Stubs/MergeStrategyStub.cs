@@ -3,7 +3,7 @@ using System.Linq;
 using DotnetIgnoreCliTool.Cli.Commands.Get.Merge;
 using DotnetIgnoreCliTool.Github.Models;
 
-namespace DotnetIgnoreCliToolTests.Stubs
+namespace DotnetIgnoreCliToolTests.Commands.Get.Stubs
 {
     public class MergeStrategyStub : IMergeStrategy
     {

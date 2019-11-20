@@ -1,5 +1,4 @@
-﻿using DotnetIgnoreCliTool.Cli.Files;
-using DotnetIgnoreCliTool.Github.Models;
+﻿using DotnetIgnoreCliTool.Github.Models;
 using DotnetIgnoreCliTool.Github.Services;
 using PowerArgs;
 using System;
@@ -7,24 +6,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DotnetIgnoreCliTool.Cli.Commands.Get.Merge;
-using DotnetIgnoreCliTool.Cli.Commands.Get.Split;
+using DotnetIgnoreCliTool.Cli.Commands.Get.Names;
+using DotnetIgnoreCliTool.Cli.FIles;
 
 namespace DotnetIgnoreCliTool.Cli.Commands.Get
 {
     public class GitignoreGetCommandHandler : IApplicationCommandHandler<GitignoreGetCommand>
     {
         private readonly IGitignoreService _service;
-        private readonly IFileNameSpliter _fileNameSpliter;
+        private readonly IConcatedNamesProcessor _concatedNamesProcessor;
         private readonly IMergeStrategy _mergeStrategy;
         private readonly IGitignoreFileWriter _gitignoreFileWriter;
 
         public GitignoreGetCommandHandler(IGitignoreService service,
-            IFileNameSpliter fileNameSpliter,
+            IConcatedNamesProcessor concatedNamesProcessor,
             IMergeStrategy mergeStrategy,
             IGitignoreFileWriter gitignoreFileWriter)
         {
             _service = service ?? throw new ArgumentNullException(nameof(service));
-            _fileNameSpliter = fileNameSpliter ?? throw new ArgumentNullException(nameof(fileNameSpliter));
+            _concatedNamesProcessor = concatedNamesProcessor ?? throw new ArgumentNullException(nameof(concatedNamesProcessor));
             _mergeStrategy = mergeStrategy ?? throw new ArgumentNullException(nameof(mergeStrategy));
             _gitignoreFileWriter = gitignoreFileWriter ?? throw new ArgumentNullException(nameof(gitignoreFileWriter));
         }
@@ -42,7 +42,7 @@ namespace DotnetIgnoreCliTool.Cli.Commands.Get
 
         private async Task<GitignoreFile> GetGitIgnoreFileFromGithub(string providedNames)
         {
-            var names = _fileNameSpliter.Split(providedNames);
+            var names = _concatedNamesProcessor.Process(providedNames);
 
             var gitIgnoreFiles = await DownloadAllGitIgnoreFiles(names);
 

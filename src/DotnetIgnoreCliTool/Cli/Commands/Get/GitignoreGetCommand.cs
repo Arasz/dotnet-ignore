@@ -1,13 +1,13 @@
 ﻿using McMaster.Extensions.CommandLineUtils;
 using System;
-using DotnetIgnoreCliTool.Cli.Commands.Get.Split;
+using DotnetIgnoreCliTool.Cli.Commands.Get.Names;
 
 namespace DotnetIgnoreCliTool.Cli.Commands.Get
 {
     public sealed class GitignoreGetCommand : CommandLineApplication
     {
         private readonly IApplicationCommandHandler<GitignoreGetCommand> _commandHandler;
-        private readonly IFileNameSpliter _fileNameSpliter;
+        private readonly IConcatedNamesProcessor _concatedNamesProcessor;
 
         private const string CommandName = "get";
 
@@ -16,10 +16,10 @@ namespace DotnetIgnoreCliTool.Cli.Commands.Get
         public CommandOption DestinationOption { get; private set; }
 
         public GitignoreGetCommand(IApplicationCommandHandler<GitignoreGetCommand> commandHandler,
-            IFileNameSpliter fileNameSpliter)
+            IConcatedNamesProcessor concatedNamesProcessor)
         {
             _commandHandler = commandHandler ?? throw new ArgumentNullException(nameof(commandHandler));
-            _fileNameSpliter = fileNameSpliter ?? throw new ArgumentNullException(nameof(fileNameSpliter));
+            _concatedNamesProcessor = concatedNamesProcessor ?? throw new ArgumentNullException(nameof(concatedNamesProcessor));
 
             ConfigureCommandLineApplication();
         }
@@ -38,7 +38,7 @@ namespace DotnetIgnoreCliTool.Cli.Commands.Get
 
         private CommandOption CreateNamesOption()
         {
-            var description = $".gitignore file names case insensitive separated by \"{_fileNameSpliter.Separator}\"." +
+            var description = $".gitignore file names case insensitive separated by \"{_concatedNamesProcessor.Separator}\"." +
                               " Accepts short and full version of the name. When multiple names are given merged " +
                               "result file is created";
 

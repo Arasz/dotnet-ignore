@@ -3,13 +3,13 @@ using DotnetIgnoreCliTool.Cli.Commands;
 using DotnetIgnoreCliTool.Cli.Commands.Get;
 using DotnetIgnoreCliTool.Cli.Commands.List;
 using DotnetIgnoreCliTool.Cli.Execution;
-using DotnetIgnoreCliTool.Cli.Files;
 using DotnetIgnoreCliTool.Github.Services;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using DotnetIgnoreCliTool.Cli.Commands.Get.Merge;
-using DotnetIgnoreCliTool.Cli.Commands.Get.Split;
+using DotnetIgnoreCliTool.Cli.Commands.Get.Names;
+using DotnetIgnoreCliTool.Cli.FIles;
 
 namespace DotnetIgnoreCliTool
 {
@@ -26,7 +26,7 @@ namespace DotnetIgnoreCliTool
                .AddSingleton<IGitignoreService, GitignoreService>()
                .AddSingleton<IGitignoreFileWriter, GitignoreFileWriter>()
                .AddSingleton<IConsole, PhysicalConsole>()
-               .AddSingleton<IFileNameSpliter, DefaultFileNameSpliter>()
+               .AddSingleton<IConcatedNamesProcessor, ConcatedNamesProcessor>()
                .AddSingleton<IMergeStrategy, SimpleMergeStrategy>()
                .BuildServiceProvider();
 
