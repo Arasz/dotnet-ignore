@@ -5,11 +5,11 @@ using DotnetIgnoreCliTool.Github.Services;
 
 namespace DotnetIgnoreCliToolTests.Commands.Get.Stubs
 {
-    public class GithubServiceStub : IGitignoreGithubService
+    public class GitignoreServiceStub : IGitignoreService
     {
         private readonly string _content;
 
-        public GithubServiceStub(string content)
+        public GitignoreServiceStub(string content)
         {
             _content = content ?? string.Empty;
         }

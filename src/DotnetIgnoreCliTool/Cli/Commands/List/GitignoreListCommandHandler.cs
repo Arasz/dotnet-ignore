@@ -10,18 +10,18 @@ namespace DotnetIgnoreCliTool.Cli.Commands.List
 {
     public class GitignoreListCommandHandler : IApplicationCommandHandler<GitignoreListCommand>
     {
-        private readonly IGitignoreGithubService _githubService;
+        private readonly IGitignoreService _service;
         private readonly IConsole _console;
 
-        public GitignoreListCommandHandler(IGitignoreGithubService githubService, IConsole console)
+        public GitignoreListCommandHandler(IGitignoreService service, IConsole console)
         {
-            _githubService = githubService ?? throw new ArgumentNullException(nameof(githubService));
+            _service = service ?? throw new ArgumentNullException(nameof(service));
             _console = console ?? throw new ArgumentNullException(nameof(console));
         }
 
         public async Task<int> HandleCommandAsync(GitignoreListCommand command)
         {
-            IReadOnlyList<string> gitignoreFilesNames = await _githubService.GetAllIgnoreFilesNames();
+            IReadOnlyList<string> gitignoreFilesNames = await _service.GetAllIgnoreFilesNames();
 
             if (command.ShortOption.HasValue())
             {

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DotnetIgnoreCliTool.Github.Services
 {
-    public class GitignoreGithubService : IGitignoreGithubService
+    public class GitignoreService : IGitignoreService
     {
         private const string RepositoryOwner = "github";
         private readonly IGitHubClient _gitHubClient;
@@ -17,13 +17,13 @@ namespace DotnetIgnoreCliTool.Github.Services
         private const string GitignoreFileName = ".gitignore";
         private readonly HttpClient _httpClient;
 
-        public GitignoreGithubService(IGitHubClient gitHubClient)
+        public GitignoreService(IGitHubClient gitHubClient)
         {
             _gitHubClient = gitHubClient ?? throw new ArgumentNullException(nameof(gitHubClient));
             _httpClient = new HttpClient();
         }
 
-        public GitignoreGithubService()
+        public GitignoreService()
         {
             _gitHubClient = new GitHubClient(new ProductHeaderValue("dotnet-ignore"));
             _httpClient = new HttpClient();

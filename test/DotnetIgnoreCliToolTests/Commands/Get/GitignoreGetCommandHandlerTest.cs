@@ -24,7 +24,7 @@ namespace DotnetIgnoreCliToolTests.Commands.Get
             const string gitignoreContent = "test content # ./[*]";
             const string destination = "C:/test";
 
-            var githubServiceStub = new GithubServiceStub(gitignoreContent);
+            var githubServiceStub = new GitignoreServiceStub(gitignoreContent);
 
             var fileWriterMock = new Mock<IGitignoreFileWriter>();
             fileWriterMock
@@ -57,7 +57,7 @@ namespace DotnetIgnoreCliToolTests.Commands.Get
             const string destination = "C:/test";
             const string expectedContent = gitignoreContent + gitignoreContent; // As in merge stub
 
-            var githubServiceStub = new GithubServiceStub(gitignoreContent);
+            var githubServiceStub = new GitignoreServiceStub(gitignoreContent);
 
             var fileWriterMock = new Mock<IGitignoreFileWriter>();
             fileWriterMock
@@ -89,7 +89,7 @@ namespace DotnetIgnoreCliToolTests.Commands.Get
             const string gitignoreFilename = "non-existing.gitignore";
             const string destination = "C:/test";
 
-            var githubServiceMock = new Mock<IGitignoreGithubService>();
+            var githubServiceMock = new Mock<IGitignoreService>();
             githubServiceMock
                .Setup(service => service.GetIgnoreFile(gitignoreFilename))
                .ReturnsAsync(GitignoreFile.Empty)
@@ -119,7 +119,7 @@ namespace DotnetIgnoreCliToolTests.Commands.Get
             const string gitignoreContent = "test content # ./[*]";
             const string destination = "C::::D/test";
 
-            var githubServiceMock = new Mock<IGitignoreGithubService>();
+            var githubServiceMock = new Mock<IGitignoreService>();
             githubServiceMock
                .Setup(service => service.GetIgnoreFile(It.IsAny<string>()))
                .ReturnsAsync(new GitignoreFile(gitignoreFilename, gitignoreContent))
@@ -148,14 +148,14 @@ namespace DotnetIgnoreCliToolTests.Commands.Get
         }
 
         private static (GitignoreGetCommand command, GitignoreGetCommandHandler handler) CreateCommandAndHandler(
-            IGitignoreGithubService githubService,
+            IGitignoreService service,
             IGitignoreFileWriter gitignoreFileWriter)
         {
             var fileNameSpliterStub = new FileNameSpliterStub();
             var mergeStrategyStub = new MergeStrategyStub();
 
             var handler = new GitignoreGetCommandHandler(
-                githubService,
+                service,
                 fileNameSpliterStub,
                 mergeStrategyStub,
                 gitignoreFileWriter);
