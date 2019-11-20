@@ -30,7 +30,7 @@ namespace DotnetIgnoreCliTool.Cli.Commands.Get.Merge
 
             foreach (var gitignoreFile in gitignoreFiles)
             {
-                stringBuilder.AppendLine($"# {gitignoreFile.Name}");
+                stringBuilder.AppendLine($"# [[{gitignoreFile.Name}]]");
                 stringBuilder.AppendLine();
                 stringBuilder.AppendLine(gitignoreFile.Content);
             }
