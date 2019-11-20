@@ -61,7 +61,7 @@ namespace DotnetIgnoreCliTool.Cli.Commands.Get
             
             return gitIgnoreFilesTasks
                .Select(task => task.Result)
-               .ToArray();;
+               .ToArray();
         }
 
 

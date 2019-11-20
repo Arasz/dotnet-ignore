@@ -8,6 +8,10 @@ namespace DotnetIgnoreCliToolTests.Commands.Get
     public class ConcatedNamesProcessorTests : UnitTestBase
     {
         [Theory]
+        [InlineData("a", new[]
+        {
+            "a"
+        })]
         [InlineData("a,b", new[]
         {
             "a", "b"

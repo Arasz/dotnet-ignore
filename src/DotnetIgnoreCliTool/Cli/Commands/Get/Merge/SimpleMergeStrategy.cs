@@ -12,6 +12,11 @@ namespace DotnetIgnoreCliTool.Cli.Commands.Get.Merge
 
         public GitignoreFile Merge(IReadOnlyCollection<GitignoreFile> gitignoreFiles)
         {
+            if (gitignoreFiles is null)
+            {
+                throw new ArgumentNullException(nameof(gitignoreFiles));
+            }
+
             if (gitignoreFiles.Count == 1)
             {
                 return gitignoreFiles.First();

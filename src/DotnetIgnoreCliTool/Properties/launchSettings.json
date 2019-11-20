@@ -7,7 +7,7 @@
     "Get with name": {
       "commandName": "Executable",
       "executablePath": "C:\\Code\\dotnet-ignore\\src\\DotnetIgnoreCliTool\\bin\\Debug\\netcoreapp2.1\\dotnet-ignore.dll",
-      "commandLineArgs": "get -n maven"
+      "commandLineArgs": "get -n maven,visualstudio"
     }
   }
 }
