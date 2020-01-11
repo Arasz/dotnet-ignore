@@ -18,6 +18,7 @@ namespace DotnetIgnoreCliTool.Cli.Execution
         private void ConfigureCommandLineApplication()
         {
             Name = "ignore";
+            this.VersionOptionFromAssemblyAttributes(typeof(ApplicationCommandsExecutor).Assembly);
 
             Commands.AddRange(_subcommands);
 
