@@ -13,7 +13,6 @@
         <PackageType>DotnetCliTool</PackageType>
     </PropertyGroup>
 
-    <!--Package descriptions-->
     <PropertyGroup>
         <Authors>Rafał Araszkiewicz</Authors>
         <PackageProjectUrl>https://github.com/Arasz/dotnet-ignore</PackageProjectUrl>
