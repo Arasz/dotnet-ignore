@@ -11,25 +11,25 @@ namespace DotnetIgnoreCliToolTests.Commands.Get
     public class SimpleMergeStrategyTests : UnitTestBase
     {
         [Fact]
-        public void MergeShouldReturnOnlyFileWhenOnlyOneExist()
+        public void ShouldContainCreatedFileMessage_WhenOnlyOneFileExists()
         {
             // Arrange
             var mergeStrategy = new SimpleMergeStrategy();
-            var file = new GitignoreFile("name", "content");
+            var file = new GitignoreFile("name", $"Some random content {Guid.NewGuid()}");
             var files = new[]
             {
                 file
             };
 
             // Act
-            var result = mergeStrategy.Merge(files);
+            var gitignoreFile = mergeStrategy.Merge(files);
 
             // Assert
-            result
-               .Should()
-               .Be(file);
+            gitignoreFile.Should().NotBeNull();
+            gitignoreFile.Name.Should().Be(SimpleMergeStrategy.MergedFileName);
+            gitignoreFile.Content.Should().StartWith(SimpleMergeStrategy.CreatedFileMessage).And.Contain(file.Content);
         }
-        
+
         [Fact]
         public void MergeShouldReturnMergedContentFromMultipleFiles()
         {
@@ -37,20 +37,23 @@ namespace DotnetIgnoreCliToolTests.Commands.Get
             var mergeStrategy = new SimpleMergeStrategy();
             var files = new[]
             {
-                new GitignoreFile("n1", "testContent\n222e2F#$"),
-                new GitignoreFile("n2", "differentContent\n\nfdfdf\nfe")
+                new GitignoreFile("n1", "testContent\n222e2F#$"), new GitignoreFile("n2", "differentContent\n\nfdfdf\nfe")
             };
 
             // Act
-            var result = mergeStrategy.Merge(files);
+            var gitignoreFile = mergeStrategy.Merge(files);
 
             // Assert
-            result
-               .Content
-               .Should()
-               .ContainAll(files.Select(file => file.Content));
+            gitignoreFile.Should().NotBeNull();
+            gitignoreFile.Name.Should().Be(SimpleMergeStrategy.MergedFileName);
+            gitignoreFile
+                .Content
+                .Should()
+                .StartWith(SimpleMergeStrategy.CreatedFileMessage)
+                .And
+                .ContainAll(files.Select(file => file.Content));
         }
-        
+
         [Fact]
         public void MergeShouldThrowWhenNullCollectionIsGiven()
         {
@@ -63,10 +66,10 @@ namespace DotnetIgnoreCliToolTests.Commands.Get
 
             // Assert
             mergeAction
-               .Should()
-               .Throw<ArgumentNullException>();
+                .Should()
+                .Throw<ArgumentNullException>();
         }
-        
+
         [Fact]
         public void MergeShouldReturnFileWithOnlyCommentsWhenNoGitignoreFileWasPresent()
         {
@@ -79,10 +82,10 @@ namespace DotnetIgnoreCliToolTests.Commands.Get
 
             // Assert
             result
-               .Content
-               .Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries)
-               .Should()
-               .OnlyContain(contentLine => contentLine.StartsWith("#"));
+                .Content
+                .Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries)
+                .Should()
+                .OnlyContain(contentLine => contentLine.StartsWith("#"));
         }
     }
 }

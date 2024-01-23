@@ -12,9 +12,9 @@ public sealed class GetGitIgnoreFileCommand(
     IMergeStrategy mergeStrategy,
     IGitignoreFileWriter gitignoreFileWriter)
 {
-    public async Task GetGitIgnoreFile(string names, string? destination)
+    public async Task GetGitIgnoreFile(string names, string? destination, bool removeComments)
     {
-        var gitIgnoreFile = await GetGitIgnoreFileFromGithub(names);
+        var gitIgnoreFile = await GetGitIgnoreFileFromGithub(names, removeComments);
 
         try
         {
@@ -32,7 +32,7 @@ public sealed class GetGitIgnoreFileCommand(
         }
     }
 
-    private async Task<GitignoreFile> GetGitIgnoreFileFromGithub(string providedNames)
+    private async Task<GitignoreFile> GetGitIgnoreFileFromGithub(string providedNames, bool removeComments)
     {
         var processedNames = NamesSplitStrategy.Split(providedNames);
 
@@ -40,22 +40,10 @@ public sealed class GetGitIgnoreFileCommand(
 
         EnsureAllGitIgnoreFilesWhereDownloaded(gitIgnoreFiles, processedNames);
 
-        return mergeStrategy.Merge(gitIgnoreFiles);
+        return mergeStrategy.Merge(gitIgnoreFiles, removeComments);
     }
 
-    private async Task<GitignoreFile[]> DownloadAllGitIgnoreFiles(IEnumerable<string> processedNames)
-    {
-        var gitIgnoreFilesTasks = processedNames
-            .Select(gitignoreService.GetIgnoreFile)
-            .ToArray();
-
-        await Task.WhenAll(gitIgnoreFilesTasks);
-
-        return gitIgnoreFilesTasks
-            .Select(task => task.Result)
-            .ToArray();
-    }
-
+    private Task<GitignoreFile[]> DownloadAllGitIgnoreFiles(IEnumerable<string> processedNames) => Task.WhenAll(processedNames.Select(gitignoreService.GetIgnoreFile));
 
     private static void EnsureAllGitIgnoreFilesWhereDownloaded(IReadOnlyCollection<GitignoreFile> gitIgnoreFiles,
         IEnumerable<string> names)

@@ -34,28 +34,11 @@ namespace CliTool.Github.Services
                 .ToImmutableList();
         }
 
-        private bool IsGitignoreFile(RepositoryContent content)
-        {
-            return content.Name.EndsWith(GitignoreFileName);
-        }
+        private static bool IsGitignoreFile(RepositoryContent content) => content.Name.EndsWith(GitignoreFileName);
 
         public async Task<GitignoreFile> GetIgnoreFile(string name)
         {
-            bool IsRequestedGitignoreFile(RepositoryContent content)
-            {
-                var isExactlyEqual = string.Equals(content.Name, name, StringComparison.InvariantCultureIgnoreCase);
-
-                if (!isExactlyEqual && IsGitignoreFile(content))
-                {
-                    return content.Name
-                        .Replace(GitignoreFileName, "")
-                        .Equals(name, StringComparison.InvariantCultureIgnoreCase);
-                }
-
-                return isExactlyEqual;
-            }
-
-            IReadOnlyList<RepositoryContent> repositoryContents = await _gitHubClient
+            var repositoryContents = await _gitHubClient
                 .Repository
                 .Content
                 .GetAllContents(RepositoryOwner, RepositoryName);
@@ -69,11 +52,25 @@ namespace CliTool.Github.Services
             }
 
             var fileDownloadResponse = await _httpClient.GetAsync(gitignoreFile.DownloadUrl);
-            string gitignoreFileContent = await fileDownloadResponse
+            var gitignoreFileContent = await fileDownloadResponse
                 .Content
                 .ReadAsStringAsync();
 
             return new GitignoreFile(gitignoreFile.Name, gitignoreFileContent);
+
+            bool IsRequestedGitignoreFile(RepositoryContent content)
+            {
+                var isExactlyEqual = string.Equals(content.Name, name, StringComparison.InvariantCultureIgnoreCase);
+
+                if (!isExactlyEqual && IsGitignoreFile(content))
+                {
+                    return content.Name
+                        .Replace(GitignoreFileName, "")
+                        .Equals(name, StringComparison.InvariantCultureIgnoreCase);
+                }
+
+                return isExactlyEqual;
+            }
         }
     }
 }

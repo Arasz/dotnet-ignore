@@ -5,31 +5,37 @@ namespace CliTool.Merge
 {
     public sealed class SimpleMergeStrategy : IMergeStrategy
     {
-        private const string MergedFileName = "merged.gitignore";
+        public const string CreatedFileMessage = "# Git ignore file created by dotnet-ignore";
+        public const string MergedFileName = ".gitignore";
+        private const string CommentLineMarker = "#";
 
-        public GitignoreFile Merge(IReadOnlyCollection<GitignoreFile> gitignoreFiles)
+        public GitignoreFile Merge(IReadOnlyCollection<GitignoreFile> gitignoreFiles, bool removeComments = false)
         {
-            if (gitignoreFiles is null)
-            {
-                throw new ArgumentNullException(nameof(gitignoreFiles));
-            }
-
-            if (gitignoreFiles.Count == 1)
-            {
-                return gitignoreFiles.First();
-            }
+            ArgumentNullException.ThrowIfNull(gitignoreFiles);
 
             var stringBuilder = new StringBuilder();
 
-            stringBuilder.AppendLine($"# Git ignore file created by dotnet-ignore on {DateTime.Now:f}");
-            stringBuilder.AppendLine($"# Merged from {gitignoreFiles.Count} .gitignore files");
+            stringBuilder.AppendLine($"{CreatedFileMessage} on {DateTime.Now:f}");
+            stringBuilder.AppendLine($"# Created from {gitignoreFiles.Count} .gitignore files:");
+            stringBuilder.AppendLine($"# {string.Join(", ", gitignoreFiles.Select(file => file.Name))}");
             stringBuilder.AppendLine();
+
+            var ignoreFileLines = new HashSet<string>();
 
             foreach (var gitignoreFile in gitignoreFiles)
             {
-                stringBuilder.AppendLine($"# [[{gitignoreFile.Name}]]");
-                stringBuilder.AppendLine();
-                stringBuilder.AppendLine(gitignoreFile.Content);
+                foreach (var ignoreLine in gitignoreFile.Content.Split(Environment.NewLine))
+                {
+                    if (removeComments && ignoreLine.StartsWith(CommentLineMarker))
+                    {
+                        continue;
+                    }
+
+                    if (ignoreFileLines.Add(ignoreLine))
+                    {
+                        stringBuilder.AppendLine(ignoreLine);
+                    }
+                }
             }
 
             return new GitignoreFile(MergedFileName, stringBuilder.ToString());

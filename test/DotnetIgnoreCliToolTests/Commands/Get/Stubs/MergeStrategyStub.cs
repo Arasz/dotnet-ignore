@@ -7,7 +7,7 @@ namespace DotnetIgnoreCliToolTests.Commands.Get.Stubs
 {
     public class MergeStrategyStub : IMergeStrategy
     {
-        public GitignoreFile Merge(IReadOnlyCollection<GitignoreFile> gitignoreFiles)
+        public GitignoreFile Merge(IReadOnlyCollection<GitignoreFile> gitignoreFiles, bool removeComments = false)
         {
             var mergedContent = gitignoreFiles
                 .Select(file => file.Content)

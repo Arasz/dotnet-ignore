@@ -27,7 +27,9 @@ consoleApp.AddCommand("get", ([Argument(Description =
         string names,
         [Option('d', Description = "Destination directory where a .gitignore file will be saved. If not provided execution directory will be used as a default value")]
         string? destination,
-        GetGitIgnoreFileCommand command) => Task.FromResult(command.GetGitIgnoreFile(names, destination)))
+        [Option('r', Description = "Removes comments from gitignore file")]
+        bool removeComments,
+        GetGitIgnoreFileCommand command) => Task.FromResult(command.GetGitIgnoreFile(names, destination, removeComments)))
     .WithDescription("Build .gitignore file from files specified by the names parameter");
 
 consoleApp.AddCommand("list",

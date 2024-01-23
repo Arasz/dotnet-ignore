@@ -32,7 +32,7 @@ namespace DotnetIgnoreCliToolTests.Commands.Get
             var command = new GetGitIgnoreFileCommand(githubServiceStub, mergeStrategyStub, fileWriterMock.Object);
 
             // Act
-            var executeCommandAction = async () => await command.GetGitIgnoreFile(gitignoreFilename, destination);
+            var executeCommandAction = async () => await command.GetGitIgnoreFile(gitignoreFilename, destination, false);
 
             // Assert
             await executeCommandAction.Should().NotThrowAsync();
@@ -60,7 +60,7 @@ namespace DotnetIgnoreCliToolTests.Commands.Get
             var command = new GetGitIgnoreFileCommand(githubServiceStub, mergeStrategyStub, fileWriterMock.Object);
 
             // Act
-            var executeCommandAction = async () => await command.GetGitIgnoreFile(gitignoreFilenames, destination);
+            var executeCommandAction = async () => await command.GetGitIgnoreFile(gitignoreFilenames, destination, false);
 
             // Assert
             await executeCommandAction.Should().NotThrowAsync();
@@ -87,7 +87,7 @@ namespace DotnetIgnoreCliToolTests.Commands.Get
             var command = new GetGitIgnoreFileCommand(githubServiceMock.Object, mergeStrategyStub, fileWriterMock.Object);
 
             // Act
-            var executeCommandAction = async () => await command.GetGitIgnoreFile(gitignoreFilename, destination);
+            var executeCommandAction = async () => await command.GetGitIgnoreFile(gitignoreFilename, destination, false);
 
             // Assert
             await executeCommandAction.Should().ThrowAsync<ArgumentException>();
@@ -118,7 +118,7 @@ namespace DotnetIgnoreCliToolTests.Commands.Get
             var command = new GetGitIgnoreFileCommand(githubServiceMock.Object, mergeStrategyStub, fileWriterMock.Object);
 
             // Act
-            var executeCommandAction = async () => await command.GetGitIgnoreFile(gitignoreFilename, destination);
+            var executeCommandAction = async () => await command.GetGitIgnoreFile(gitignoreFilename, destination, false);
 
             // Assert
             await executeCommandAction.Should().ThrowAsync<ArgumentException>();
