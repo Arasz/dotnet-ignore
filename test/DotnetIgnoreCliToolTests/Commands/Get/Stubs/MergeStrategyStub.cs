@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
-using DotnetIgnoreCliTool.Cli.Commands.Get.Merge;
-using DotnetIgnoreCliTool.Github.Models;
+using CliTool.Github.Models;
+using CliTool.Merge;
 
 namespace DotnetIgnoreCliToolTests.Commands.Get.Stubs
 {
@@ -10,8 +10,8 @@ namespace DotnetIgnoreCliToolTests.Commands.Get.Stubs
         public GitignoreFile Merge(IReadOnlyCollection<GitignoreFile> gitignoreFiles)
         {
             var mergedContent = gitignoreFiles
-               .Select(file => file.Content)
-               .Aggregate((content, accum) => accum + content);
+                .Select(file => file.Content)
+                .Aggregate((content, accum) => accum + content);
 
             return new GitignoreFile("MERGED", mergedContent);
         }

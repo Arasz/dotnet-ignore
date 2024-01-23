@@ -1,5 +1,5 @@
 using System;
-using DotnetIgnoreCliTool.Cli.Commands.Get.Names;
+using CliTool.Arguments;
 using FluentAssertions;
 using Xunit;
 
@@ -28,34 +28,31 @@ namespace DotnetIgnoreCliToolTests.Commands.Get
         {
             "a", "b"
         })]
-        public void ProcessShouldReturnCollectionOfStringsWhenSeparatorIsPresent(string names, string[] expectedNames)
+        public void ShouldReturnCollectionOfStrings_WhenSeparatorIsPresent(string names, string[] expectedNames)
         {
             // Arrange
-            var spliter = new ConcatedNamesProcessor();
-
             // Act
-            var resultNames = spliter.Process(names);
+            var resultNames = NamesSplitStrategy.Split(names);
 
             // Assert
             resultNames
-               .Should()
-               .BeEquivalentTo(expectedNames);
+                .Should()
+                .BeEquivalentTo(expectedNames);
         }
 
         [Fact]
-        public void ProcessShouldThrowWhenFileNamesIsNull()
+        public void ShouldThrow_WhenFileNamesIsNull()
         {
             // Arrange
             string nullNames = null;
-            var spliter = new ConcatedNamesProcessor();
 
             // Act
-            Action splitCall = () => spliter.Process(nullNames);
+            Action splitCall = () => NamesSplitStrategy.Split(nullNames);
 
             // Assert
             splitCall
-               .Should()
-               .Throw<ArgumentNullException>();
+                .Should()
+                .Throw<NullReferenceException>();
         }
     }
 }

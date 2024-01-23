@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using DotnetIgnoreCliTool.Cli.Commands.Get.Merge;
-using DotnetIgnoreCliTool.Github.Models;
+using CliTool.Github.Models;
+using CliTool.Merge;
 using FluentAssertions;
 using Xunit;
 

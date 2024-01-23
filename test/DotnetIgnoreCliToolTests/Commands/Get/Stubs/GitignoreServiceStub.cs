@@ -1,19 +1,14 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using DotnetIgnoreCliTool.Github.Models;
-using DotnetIgnoreCliTool.Github.Services;
+using CliTool.Github.Models;
+using CliTool.Github.Services;
 
 namespace DotnetIgnoreCliToolTests.Commands.Get.Stubs
 {
-    public class GitignoreServiceStub : IGitignoreService
+    public class GitignoreServiceStub(string content) : IGitignoreService
     {
-        private readonly string _content;
+        private readonly string _content = content ?? string.Empty;
 
-        public GitignoreServiceStub(string content)
-        {
-            _content = content ?? string.Empty;
-        }
-        
         public Task<IReadOnlyList<string>> GetAllIgnoreFilesNames()
         {
             throw new System.NotImplementedException();

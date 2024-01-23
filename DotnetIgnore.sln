@@ -5,8 +5,6 @@ VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{184DF859-5D1D-4248-9FCA-79A652AF5CDE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotnetIgnoreCliTool", "src\DotnetIgnoreCliTool\DotnetIgnoreCliTool.csproj", "{3290AF8A-E7E8-410A-A213-07407013F18C}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{07166E86-EFC8-4EFA-87B0-EF63553A6157}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotnetIgnoreCliToolTests", "test\DotnetIgnoreCliToolTests\DotnetIgnoreCliToolTests.csproj", "{EC16E465-C921-4025-ACE6-4F90084655EB}"
@@ -23,18 +21,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{3290AF8A-E7E8-410A-A213-07407013F18C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3290AF8A-E7E8-410A-A213-07407013F18C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3290AF8A-E7E8-410A-A213-07407013F18C}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{3290AF8A-E7E8-410A-A213-07407013F18C}.Debug|x64.Build.0 = Debug|Any CPU
-		{3290AF8A-E7E8-410A-A213-07407013F18C}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{3290AF8A-E7E8-410A-A213-07407013F18C}.Debug|x86.Build.0 = Debug|Any CPU
-		{3290AF8A-E7E8-410A-A213-07407013F18C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3290AF8A-E7E8-410A-A213-07407013F18C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3290AF8A-E7E8-410A-A213-07407013F18C}.Release|x64.ActiveCfg = Release|Any CPU
-		{3290AF8A-E7E8-410A-A213-07407013F18C}.Release|x64.Build.0 = Release|Any CPU
-		{3290AF8A-E7E8-410A-A213-07407013F18C}.Release|x86.ActiveCfg = Release|Any CPU
-		{3290AF8A-E7E8-410A-A213-07407013F18C}.Release|x86.Build.0 = Release|Any CPU
 		{EC16E465-C921-4025-ACE6-4F90084655EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EC16E465-C921-4025-ACE6-4F90084655EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EC16E465-C921-4025-ACE6-4F90084655EB}.Debug|x64.ActiveCfg = Debug|Any CPU
@@ -64,7 +50,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{3290AF8A-E7E8-410A-A213-07407013F18C} = {184DF859-5D1D-4248-9FCA-79A652AF5CDE}
 		{EC16E465-C921-4025-ACE6-4F90084655EB} = {07166E86-EFC8-4EFA-87B0-EF63553A6157}
 		{31053B65-60B4-4013-8AAB-50447B0554BA} = {184DF859-5D1D-4248-9FCA-79A652AF5CDE}
 	EndGlobalSection

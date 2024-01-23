@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\DotnetIgnoreCliTool\DotnetIgnoreCliTool.csproj" />
+    <ProjectReference Include="..\..\src\CliTool\CliTool.csproj" />
   </ItemGroup>
 
 </Project>
