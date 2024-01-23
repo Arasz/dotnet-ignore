@@ -16,8 +16,7 @@ namespace CliTool.Merge
             ArgumentNullException.ThrowIfNull(gitignoreFiles);
 
             var stringBuilder = new StringBuilder();
-
-            stringBuilder.AppendLine("#");
+            
             stringBuilder.AppendLine($"{CreatedFileMessage} on {DateTime.Now:g}");
             if (minimizeFileSize)
             {
@@ -25,7 +24,6 @@ namespace CliTool.Merge
             }
 
             stringBuilder.AppendLine($"# Created from {gitignoreFiles.Count} .gitignore files: {string.Join(", ", gitignoreFiles.Select(file => file.Name))}");
-            stringBuilder.AppendLine("#");
 
             if (minimizeFileSize)
             {
