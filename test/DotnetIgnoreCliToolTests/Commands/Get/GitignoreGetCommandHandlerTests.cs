@@ -8,6 +8,7 @@ using DotnetIgnoreCliTool.Github.Services;
 using DotnetIgnoreCliToolTests.Commands.Get.Extensions;
 using DotnetIgnoreCliToolTests.Commands.Get.Stubs;
 using FluentAssertions;
+using McMaster.Extensions.CommandLineUtils;
 using Moq;
 using PowerArgs;
 using Xunit;
@@ -151,16 +152,18 @@ namespace DotnetIgnoreCliToolTests.Commands.Get
             IGitignoreService service,
             IGitignoreFileWriter gitignoreFileWriter)
         {
-            var fileNameSpliterStub = new ConcatedNamesProcessorStub();
+            var fileNameSplitterStub = new ConcatedNamesProcessorStub();
             var mergeStrategyStub = new MergeStrategyStub();
 
             var handler = new GitignoreGetCommandHandler(
                 service,
-                fileNameSpliterStub,
+                fileNameSplitterStub,
                 mergeStrategyStub,
                 gitignoreFileWriter);
 
-            var command = new GitignoreGetCommand(handler, fileNameSpliterStub);
+            var command = new GitignoreGetCommand(handler, fileNameSplitterStub)
+            {
+            };
 
             return (command, handler);
         }
