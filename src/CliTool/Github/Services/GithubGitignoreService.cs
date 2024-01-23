@@ -54,7 +54,8 @@ namespace CliTool.Github.Services
             var fileDownloadResponse = await _httpClient.GetAsync(gitignoreFile.DownloadUrl);
             var gitignoreFileContent = await fileDownloadResponse
                 .Content
-                .ReadAsStringAsync();
+                .ReadAsStringAsync()
+                .ConfigureAwait(false);
 
             return new GitignoreFile(gitignoreFile.Name, gitignoreFileContent);
 

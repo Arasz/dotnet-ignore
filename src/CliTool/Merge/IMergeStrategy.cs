@@ -4,6 +4,6 @@ namespace CliTool.Merge
 {
     public interface IMergeStrategy
     {
-        GitignoreFile Merge(IReadOnlyCollection<GitignoreFile> gitignoreFiles, bool removeComments = false);
+        GitignoreFile Merge(IReadOnlyCollection<GitignoreFile> gitignoreFiles, bool minimizeFileSize = false);
     }
 }
