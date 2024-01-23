@@ -3,25 +3,29 @@ using CliTool.FIles;
 using CliTool.Github.Models;
 using CliTool.Github.Services;
 using CliTool.Merge;
-using CliTool.Names;
 using Cocona;
 using CommunityToolkit.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
+
+const string splitSeparator = ",";
 
 var consoleAppBuilder = CoconaApp.CreateBuilder();
 
 consoleAppBuilder.Services
     .AddSingleton<IGitignoreService, GithubGitignoreService>()
     .AddSingleton<IGitignoreFileWriter, GitignoreFileWriter>()
-    .AddSingleton<IConcatedNamesProcessor, ConcatedNamesProcessor>()
     .AddSingleton<IMergeStrategy, SimpleMergeStrategy>();
 
 var consoleApp = consoleAppBuilder.Build();
 
-consoleApp.AddCommand("get", async ([Argument] string names,
-    [Option('d')] string? destination,
+consoleApp.AddCommand("get", async ([Argument(Description =
+        $"""
+         Git ignore files names, case insensitive, separated by "{splitSeparator}". Accepts file names with and without .gitignore part. When multiple names are given files are merged into one result file.
+         """)]
+    string names,
+    [Option('d', Description = "Destination directory where a .gitignore file will be saved. If not provided execution directory will be used as a default value")]
+    string? destination,
     IGitignoreService gitignoreService,
-    IConcatedNamesProcessor concatedNamesProcessor,
     IMergeStrategy mergeStrategy,
     IGitignoreFileWriter gitignoreFileWriter) =>
 {
@@ -46,7 +50,7 @@ consoleApp.AddCommand("get", async ([Argument] string names,
 
     async Task<GitignoreFile> GetGitIgnoreFileFromGithub(string providedNames)
     {
-        var processedNames = concatedNamesProcessor.Process(providedNames);
+        var processedNames = providedNames.Split(splitSeparator, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
         var gitIgnoreFiles = await DownloadAllGitIgnoreFiles(processedNames);
 
@@ -90,7 +94,7 @@ consoleApp.AddCommand("get", async ([Argument] string names,
     }
 });
 
-consoleApp.AddCommand("list", async ([Option('s')] bool shorten, IGitignoreService gitignoreService) =>
+consoleApp.AddCommand("list", async ([Option('s', Description = "Prints files names without .gitignore part")] bool shorten, IGitignoreService gitignoreService) =>
 {
     var gitignoreFilesNames = await gitignoreService.GetAllIgnoreFilesNames();
 

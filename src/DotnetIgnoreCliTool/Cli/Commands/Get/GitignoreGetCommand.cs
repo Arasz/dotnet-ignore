@@ -50,8 +50,7 @@ namespace DotnetIgnoreCliTool.Cli.Commands.Get
 
         private CommandOption CreateDestinationOption()
         {
-            const string description = "Destination directory where gitignore will be saved. If not provided " +
-                                       "execution directory will be used";
+            const string description = "Destination directory where gitignore will be saved. If not provided execution directory will be used";
 
             return Option("-d | --destination",
                 description,
