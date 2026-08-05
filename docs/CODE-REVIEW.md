@@ -132,3 +132,24 @@ severity / location / evidence / fix.
   (finding 16) keeps Release packing so the "Build and push" pipeline is unaffected.
 - `Github` namespace casing (GitHub) — cosmetic, deferred; folder typo `FIles` is
   fixed instead.
+
+## Post-refactor verdict (2026-08-05, after docs/REFACTOR-PLAN.md executed)
+
+All findings resolved except the two explicitly deferred items above. Coverage
+re-measured after the refactor (same coverlet.collector 10.0.1):
+
+| Metric | Before | After |
+|---|---:|---:|
+| Line coverage (whole solution) | 30.23% | 78.26% |
+| Branch coverage | 19.44% | 97.05% |
+| SimpleMergeStrategy | 37.14% | 100% |
+| GithubGitignoreService | 0% (no unit tests) | 100% |
+| ListGitIgnoreFilesCommand | 0% | 100% |
+| GitignoreFileWriter | 0% | 100% |
+| Program.cs (top-level wiring) | 0% | 0% (smoke-verified; exit codes tested manually) |
+
+Live API integration tests were replaced by mocked unit tests; the suite no
+longer depends on the network. Findings #1-#4 (bugs), #5-#12 (medium), #13-#17
+(low) all closed. Scope extension from the user (e:): CI migrated from Azure
+DevOps to GitHub Actions — `.github/workflows/build.yml` (CI) and
+`publish.yml` (NuGet push via Trusted Publishing, OIDC, no API keys).
