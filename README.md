@@ -51,24 +51,25 @@ Run `dotnet ignore -h` for the complete command description.
 
 ## Releasing
 
-Releases are driven by a `latest` label on a pull request and a manual approval:
+Every merge to `master` triggers the `publish` workflow, which waits for approval
+before pushing to NuGet:
 
 1. Prepare the release PR: bump `<Version>` in `src/CliTool/CliTool.csproj` and add a
    [CHANGELOG.md](CHANGELOG.md) entry.
-2. Add the `latest` label to the PR (from the PR page). PRs are otherwise labeled
-   automatically by the Labeler workflow based on the changed paths.
-3. Merge the PR to `master`. The `publish` workflow starts and **waits for approval**.
-4. Approve the run: Actions -> the `publish` run -> Review -> Approve. The package is
-   pushed to NuGet via [Trusted Publishing](https://learn.microsoft.com/en-us/nuget/nuget-org/trusted-publishing)
-   (no API keys).
+2. Merge the PR to `master`. The `publish` workflow starts and **waits for approval**.
+3. Approve the run: Actions -> the `publish` run -> Review deployments -> Approve and
+   deploy. The package is pushed to NuGet via
+   [Trusted Publishing](https://learn.microsoft.com/en-us/nuget/nuget-org/trusted-publishing)
+   (no API keys), and the released version is commented on the merged PR.
 
-The `latest` label is removed and a release comment is posted on the PR after a
-successful push. The workflow can also be started manually (Actions -> publish ->
-Run workflow), which is subject to the same approval.
+The workflow can also be started manually (Actions -> publish -> Run workflow),
+subject to the same approval.
 
-> The approval gate is a GitHub environment (`publish`) with a required reviewer.
-> Configure it once: Settings -> Environments -> `publish` -> Required reviewers ->
-> add your account. Until then the workflow runs without waiting.
+> The approval gate is the `publish` environment. To activate it, add yourself as a
+> required reviewer once: Settings -> Environments -> `publish` -> Required
+> reviewers. The NuGet Trusted Publishing policy is bound to the same environment
+> name, so the OIDC token exchange only succeeds when the job runs in it. Until
+> the reviewer rule is set, runs push without waiting.
 
 ## Changelog
 

@@ -9,15 +9,18 @@ on:
 permissions:
   contents: read
   id-token: write # required for NuGet Trusted Publishing (OIDC token issuance)
-  pull-requests: write # to remove the 'latest' label after a successful publish
+  pull-requests: write # to comment the released version on the merged PR
 
 jobs:
   publish:
-    # Auto-trigger: a PR labeled 'latest' merged to master. Manual dispatch always runs.
-    if: github.event_name == 'workflow_dispatch' || (github.event.pull_request.merged == true && contains(github.event.pull_request.labels.*.name, 'latest'))
+    # Any PR merged to master triggers a publish (master is implicitly the latest
+    # release). Manual dispatch always runs.
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.merged == true
     runs-on: ubuntu-latest
-    # Approval gate: the whole run waits here until the run is approved in the UI.
-    # Configure the required reviewers in Settings -> Environments -> publish.
+    # Two jobs in one: the NuGet Trusted Publishing policy is bound to the
+    # 'publish' environment (the OIDC token must carry it, or the token exchange
+    # fails with 401), and a required reviewer configured on this environment
+    # pauses the run until it is approved in the UI.
     environment: publish
     steps:
       - uses: actions/checkout@v4
@@ -41,12 +44,11 @@ jobs:
       - name: Push to NuGet
         run: dotnet nuget push ./artifacts/*.nupkg --api-key ${{ steps.login.outputs.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
 
-      - name: Mark release done
+      - name: Announce released version
         if: github.event_name == 'pull_request'
         env:
           GH_TOKEN: ${{ github.token }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
         run: |
-          gh pr edit "$PR_NUMBER" --remove-label latest || true
           VERSION=$(find ./artifacts -maxdepth 1 -name '*.nupkg' | head -1 | grep -oE '[0-9]+\.[0-9]+\.[0-9]+')
           gh pr comment "$PR_NUMBER" --body "Released as dotnet-ignore ${VERSION} on NuGet." || true

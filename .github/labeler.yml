@@ -1,6 +1,4 @@
 # Path-based PR labeling for actions/labeler@v7.
-# The `latest` label is NOT auto-assigned: it marks the next release and is
-# added manually to a PR (see the Releasing section in README.md).
 
 dotnet:
   - changed-files:
