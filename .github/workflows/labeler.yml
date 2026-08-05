@@ -1,32 +1,32 @@
-name: labeler
+# This workflow will triage pull requests and apply a label based on the
+# paths that are modified in the pull request.
+#
+# To use this workflow, you will need to set up a .github/labeler.yml
+# file with configuration.  For more information, see:
+# https://github.com/actions/labeler
 
+name: Labeler
+# Narrowed from the bare `[pull_request_target]` shorthand (which fires on every
+# synchronize too): actions/labeler@v7 defaults sync-labels to false, so it only
+# ever adds labels — re-running it on every push to the PR branch adds nothing.
+# opened/reopened is enough to label a PR once.
 on:
-  issue_comment:
-    types: [created]
-
-permissions:
-  pull-requests: write
+  pull_request_target:
+    types: [ opened, reopened ]
 
 jobs:
-  add-latest-label:
-    # 'latest' marks a PR as the next release: comment /latest on the PR.
-    if: github.event.issue.pull_request && startsWith(github.event.comment.body, '/latest')
-    runs-on: ubuntu-latest
+  label:
+    # ubuntu-slim (GA 2026-01-22): $0.002/min vs $0.006 for ubuntu-latest. Safe here —
+    # this job only runs actions/labeler@v7 (a GitHub-API call), no Docker, no `services:`,
+    # no .NET. ubuntu-slim has a hard 15-min cap and runs unprivileged; do not add a
+    # `services:` block or a Docker step to this job without moving it back to ubuntu-latest.
+    runs-on: ubuntu-slim
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      pull-requests: write
+
     steps:
-      - uses: actions/github-script@v7
-        with:
-          script: |
-            const { owner, repo } = context.repo;
-            const issueNumber = context.payload.issue.number;
-            await github.rest.issues.addLabels({
-              owner,
-              repo,
-              issue_number: issueNumber,
-              labels: ['latest'],
-            });
-            await github.rest.issues.createComment({
-              owner,
-              repo,
-              issue_number: issueNumber,
-              body: 'Marked as the next release (`latest`). The publish workflow will run after this PR is merged to master and approved.',
-            });
+    - uses: actions/labeler@v7
+      with:
+        repo-token: "${{ secrets.GITHUB_TOKEN }}"

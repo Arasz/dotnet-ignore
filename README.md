@@ -55,7 +55,8 @@ Releases are driven by a `latest` label on a pull request and a manual approval:
 
 1. Prepare the release PR: bump `<Version>` in `src/CliTool/CliTool.csproj` and add a
    [CHANGELOG.md](CHANGELOG.md) entry.
-2. Comment `/latest` on the PR (or add the `latest` label from the PR page).
+2. Add the `latest` label to the PR (from the PR page). PRs are otherwise labeled
+   automatically by the Labeler workflow based on the changed paths.
 3. Merge the PR to `master`. The `publish` workflow starts and **waits for approval**.
 4. Approve the run: Actions -> the `publish` run -> Review -> Approve. The package is
    pushed to NuGet via [Trusted Publishing](https://learn.microsoft.com/en-us/nuget/nuget-org/trusted-publishing)
