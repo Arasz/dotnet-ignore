@@ -1,0 +1,32 @@
+name: latest-label
+
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  pull-requests: write
+
+jobs:
+  add-latest-label:
+    # 'latest' marks a PR as the next release: comment /latest on the PR.
+    if: github.event.issue.pull_request && startsWith(github.event.comment.body, '/latest')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const issueNumber = context.payload.issue.number;
+            await github.rest.issues.addLabels({
+              owner,
+              repo,
+              issue_number: issueNumber,
+              labels: ['latest'],
+            });
+            await github.rest.issues.createComment({
+              owner,
+              repo,
+              issue_number: issueNumber,
+              body: 'Marked as the next release (`latest`). The publish workflow will run after this PR is merged to master and approved.',
+            });
