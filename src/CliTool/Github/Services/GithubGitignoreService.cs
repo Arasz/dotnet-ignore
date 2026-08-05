@@ -2,76 +2,66 @@
 using CliTool.Github.Models;
 using Octokit;
 
-namespace CliTool.Github.Services
+namespace CliTool.Github.Services;
+
+public sealed class GithubGitignoreService(IGitHubClient gitHubClient, HttpClient httpClient) : IGitignoreService
 {
-    public class GithubGitignoreService : IGitignoreService
+    private const string RepositoryOwner = "github";
+    private const string RepositoryName = "gitignore";
+    private const string GitignoreFileName = ".gitignore";
+
+    private IReadOnlyList<RepositoryContent>? _repositoryContents;
+
+    public async Task<IReadOnlyList<string>> GetAllIgnoreFilesNames()
     {
-        private const string RepositoryOwner = "github";
-        private readonly IGitHubClient _gitHubClient;
-        private const string RepositoryName = "gitignore";
-        private const string GitignoreFileName = ".gitignore";
-        private readonly HttpClient _httpClient;
+        var repositoryContents = await GetRepositoryContents();
+        return repositoryContents
+            .Where(content => content.Type == ContentType.File)
+            .Where(IsGitignoreFile)
+            .Select(content => content.Name)
+            .ToImmutableList();
+    }
 
-        public GithubGitignoreService(IGitHubClient gitHubClient)
+    public async Task<GitignoreFile?> GetIgnoreFile(string name)
+    {
+        var repositoryContents = await GetRepositoryContents();
+
+        var gitignoreFile = repositoryContents
+            .FirstOrDefault(content => content.Type == ContentType.File && IsRequestedGitignoreFile(content, name));
+
+        if (gitignoreFile is null)
         {
-            _gitHubClient = gitHubClient ?? throw new ArgumentNullException(nameof(gitHubClient));
-            _httpClient = new HttpClient();
+            return null;
         }
 
-        public GithubGitignoreService()
+        var fileDownloadResponse = await httpClient.GetAsync(gitignoreFile.DownloadUrl);
+        fileDownloadResponse.EnsureSuccessStatusCode();
+        var gitignoreFileContent = await fileDownloadResponse
+            .Content
+            .ReadAsStringAsync();
+
+        return new GitignoreFile(gitignoreFile.Name, gitignoreFileContent);
+    }
+
+    private async Task<IReadOnlyList<RepositoryContent>> GetRepositoryContents()
+    {
+        return _repositoryContents ??=
+            await gitHubClient.Repository.Content.GetAllContents(RepositoryOwner, RepositoryName);
+    }
+
+    private static bool IsGitignoreFile(RepositoryContent content) => content.Name.EndsWith(GitignoreFileName);
+
+    private static bool IsRequestedGitignoreFile(RepositoryContent content, string name)
+    {
+        var isExactlyEqual = string.Equals(content.Name, name, StringComparison.InvariantCultureIgnoreCase);
+
+        if (!isExactlyEqual && IsGitignoreFile(content))
         {
-            _gitHubClient = new GitHubClient(new ProductHeaderValue("dotnet-ignore"));
-            _httpClient = new HttpClient();
+            return content.Name
+                .Replace(GitignoreFileName, "")
+                .Equals(name, StringComparison.InvariantCultureIgnoreCase);
         }
 
-        public async Task<IReadOnlyList<string>> GetAllIgnoreFilesNames()
-        {
-            IReadOnlyList<RepositoryContent> repositoryContents = await _gitHubClient.Repository.Content.GetAllContents(RepositoryOwner, RepositoryName);
-            return repositoryContents
-                .Where(content => content.Type.Value == ContentType.File)
-                .Where(IsGitignoreFile)
-                .Select(content => content.Name)
-                .ToImmutableList();
-        }
-
-        private static bool IsGitignoreFile(RepositoryContent content) => content.Name.EndsWith(GitignoreFileName);
-
-        public async Task<GitignoreFile> GetIgnoreFile(string name)
-        {
-            var repositoryContents = await _gitHubClient
-                .Repository
-                .Content
-                .GetAllContents(RepositoryOwner, RepositoryName);
-
-            var gitignoreFile = repositoryContents
-                .FirstOrDefault(content => content.Type.Value == ContentType.File && IsRequestedGitignoreFile(content));
-
-            if (gitignoreFile is null)
-            {
-                return GitignoreFile.Empty;
-            }
-
-            var fileDownloadResponse = await _httpClient.GetAsync(gitignoreFile.DownloadUrl);
-            var gitignoreFileContent = await fileDownloadResponse
-                .Content
-                .ReadAsStringAsync()
-                .ConfigureAwait(false);
-
-            return new GitignoreFile(gitignoreFile.Name, gitignoreFileContent);
-
-            bool IsRequestedGitignoreFile(RepositoryContent content)
-            {
-                var isExactlyEqual = string.Equals(content.Name, name, StringComparison.InvariantCultureIgnoreCase);
-
-                if (!isExactlyEqual && IsGitignoreFile(content))
-                {
-                    return content.Name
-                        .Replace(GitignoreFileName, "")
-                        .Equals(name, StringComparison.InvariantCultureIgnoreCase);
-                }
-
-                return isExactlyEqual;
-            }
-        }
+        return isExactlyEqual;
     }
 }

@@ -59,10 +59,10 @@ namespace DotnetIgnoreCliToolTests.Commands.Get
         {
             // Arrange
             var mergeStrategy = new SimpleMergeStrategy();
-            IReadOnlyCollection<GitignoreFile> files = null;
+            IReadOnlyCollection<GitignoreFile>? files = null;
 
             // Act
-            Action mergeAction = () => mergeStrategy.Merge(files);
+            Action mergeAction = () => mergeStrategy.Merge(files!);
 
             // Assert
             mergeAction

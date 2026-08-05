@@ -1,11 +1,10 @@
 ﻿using CliTool.Github.Models;
 
-namespace CliTool.Github.Services
-{
-    public interface IGitignoreService
-    {
-        Task<IReadOnlyList<string>> GetAllIgnoreFilesNames();
+namespace CliTool.Github.Services;
 
-        Task<GitignoreFile> GetIgnoreFile(string name);
-    }
+public interface IGitignoreService
+{
+    Task<IReadOnlyList<string>> GetAllIgnoreFilesNames();
+
+    Task<GitignoreFile?> GetIgnoreFile(string name);
 }

@@ -4,11 +4,11 @@ namespace CliTool.Commands;
 
 public sealed class ListGitIgnoreFilesCommand(IGitignoreService gitignoreService)
 {
-    public async Task ListGitIgnoreFiles(bool fullNames)
+    public async Task ListGitIgnoreFiles(bool shorten)
     {
         var gitignoreFilesNames = await gitignoreService.GetAllIgnoreFilesNames();
 
-        if (!fullNames)
+        if (shorten)
         {
             gitignoreFilesNames = gitignoreFilesNames
                 .Select(fileName => fileName.Replace(".gitignore", ""))

@@ -44,7 +44,7 @@ namespace DotnetIgnoreCliToolTests.Commands.Get
         public void ShouldThrow_WhenFileNamesIsNull()
         {
             // Arrange
-            string nullNames = null;
+            string? nullNames = null;
 
             // Act
             Action splitCall = () => NamesSplitStrategy.Split(nullNames);
@@ -52,7 +52,7 @@ namespace DotnetIgnoreCliToolTests.Commands.Get
             // Assert
             splitCall
                 .Should()
-                .Throw<NullReferenceException>();
+                .Throw<ArgumentNullException>();
         }
     }
 }
