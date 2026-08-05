@@ -47,5 +47,5 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
         run: |
-          gh pr edit "$PR_NUMBER" --remove-label latest
-          gh pr comment "$PR_NUMBER" --body "Released as dotnet-ignore $(ls ./artifacts/*.nupkg | head -1 | grep -oE '[0-9]+\.[0-9]+\.[0-9]+') on NuGet."
+          gh pr edit "$PR_NUMBER" --remove-label latest || true
+          gh pr comment "$PR_NUMBER" --body "Released as dotnet-ignore $(ls ./artifacts/*.nupkg | head -1 | grep -oE '[0-9]+\.[0-9]+\.[0-9]+') on NuGet." || true
