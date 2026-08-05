@@ -1,0 +1,21 @@
+# Path-based PR labeling for actions/labeler@v7.
+# The `latest` label is NOT auto-assigned: it marks the next release and is
+# added manually to a PR (see the Releasing section in README.md).
+
+dotnet:
+  - changed-files:
+      - any-glob-to-any-file:
+          - src/**
+          - test/**
+
+ci:
+  - changed-files:
+      - any-glob-to-any-file:
+          - .github/**
+
+documentation:
+  - changed-files:
+      - any-glob-to-any-file:
+          - README.md
+          - CHANGELOG.md
+          - docs/**
