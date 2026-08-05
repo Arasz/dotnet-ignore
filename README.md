@@ -65,11 +65,11 @@ before pushing to NuGet:
 The workflow can also be started manually (Actions -> publish -> Run workflow),
 subject to the same approval.
 
-> The approval gate is the `publish` environment. To activate it, add yourself as a
-> required reviewer once: Settings -> Environments -> `publish` -> Required
-> reviewers. The NuGet Trusted Publishing policy is bound to the same environment
-> name, so the OIDC token exchange only succeeds when the job runs in it. Until
-> the reviewer rule is set, runs push without waiting.
+> The approval gate is the `production` environment, which already lists you as a
+> required reviewer — every publish run pauses for your approval (Review
+> deployments -> Approve and deploy). The NuGet Trusted Publishing policy is bound
+> to the same environment name, so the OIDC token exchange only succeeds when the
+> job runs in it. Manage the gate at Settings -> Environments -> `production`.
 
 ## Changelog
 
