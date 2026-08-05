@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace CliTool.FIles
+namespace CliTool.Files
 {
     public class GitignoreFileWriter : IGitignoreFileWriter
     {

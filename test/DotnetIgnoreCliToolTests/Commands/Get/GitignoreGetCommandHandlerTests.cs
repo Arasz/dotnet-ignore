@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using CliTool.Commands;
-using CliTool.FIles;
+using CliTool.Files;
 using CliTool.Github.Models;
 using CliTool.Github.Services;
 using DotnetIgnoreCliToolTests.Commands.Get.Stubs;

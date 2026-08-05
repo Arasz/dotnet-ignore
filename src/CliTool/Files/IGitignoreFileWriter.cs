@@ -1,4 +1,4 @@
-﻿namespace CliTool.FIles
+﻿namespace CliTool.Files
 {
     public interface IGitignoreFileWriter
     {

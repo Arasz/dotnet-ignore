@@ -10,7 +10,7 @@
 
     <PropertyGroup>
         <AssemblyName>dotnet-ignore</AssemblyName>
-        <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+        <GeneratePackageOnBuild Condition="'$(Configuration)'=='Release'">True</GeneratePackageOnBuild>
         <IsPackable>true</IsPackable>
         <PackAsTool>true</PackAsTool>
         <ToolCommandName>ignore</ToolCommandName>

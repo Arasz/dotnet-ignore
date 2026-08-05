@@ -1,6 +1,6 @@
 ﻿using CliTool.Arguments;
 using CliTool.Commands;
-using CliTool.FIles;
+using CliTool.Files;
 using CliTool.Github.Services;
 using CliTool.Merge;
 using Cocona;
