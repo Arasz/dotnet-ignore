@@ -23,7 +23,8 @@ public class GitignoreFileWriterTests
 
             // Assert
             var writtenContent = await File.ReadAllTextAsync(
-                Path.Combine(tempDirectory.FullName, ".gitignore"));
+                Path.Combine(tempDirectory.FullName, ".gitignore"),
+                TestContext.Current.CancellationToken);
             writtenContent.Should().Be(expectedContent);
         }
         finally
