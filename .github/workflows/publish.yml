@@ -20,8 +20,11 @@ jobs:
         with:
           dotnet-version: 10.0.x
 
+      - name: Build
+        run: dotnet build src/CliTool/CliTool.csproj -c Release
+
       - name: Pack
-        run: dotnet pack src/CliTool/CliTool.csproj -c Release -o ./artifacts
+        run: dotnet pack src/CliTool/CliTool.csproj -c Release --no-build -o ./artifacts
 
       - name: NuGet login (OIDC to temporary API key)
         uses: NuGet/login@v1
