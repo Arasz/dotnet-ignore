@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFramework>net8.0</TargetFramework>
+        <TargetFramework>net10.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <LangVersion>latest</LangVersion>
@@ -10,10 +10,10 @@
 
     <PropertyGroup>
         <AssemblyName>dotnet-ignore</AssemblyName>
-        <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-        <PackageType>DotnetCliTool</PackageType>
+        <GeneratePackageOnBuild Condition="'$(Configuration)'=='Release'">True</GeneratePackageOnBuild>
         <IsPackable>true</IsPackable>
         <PackAsTool>true</PackAsTool>
+        <ToolCommandName>ignore</ToolCommandName>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -22,23 +22,24 @@
         <RepositoryUrl>https://github.com/Arasz/dotnet-ignore</RepositoryUrl>
         <PackageTags>dotnet, cli, dotnet-cli, tool, tools, gitignore, git</PackageTags>
         <Description>.NET CLI tool that can download .gitignore file from gitignore repository</Description>
-        <PackageLicense>https://github.com/Arasz/dotnet-ignore/blob/master/LICENSE</PackageLicense>
+        <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageReleaseNotes>
-            - removed need for -n parameter when executing get command
-            - added minimize file size mode during merge
-            - changed CLI framework to Cocona
-            - other small improvements
+            - migrated to .NET 10 and updated all NuGet packages (Octokit 14, xunit v3)
+            - fixed list -s flag (was inverted)
+            - deterministic UTC merge header
+            - clean CLI error messages with exit code 1
+            - GitHub Actions CI/CD replaces Azure DevOps (see CHANGELOG.md)
         </PackageReleaseNotes>
-        <Version>1.0.9</Version>
+        <Version>1.1.0</Version>
     </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="Cocona" Version="2.2.0"/>
-        <PackageReference Include="CommunityToolkit.Diagnostics" Version="8.2.2"/>
-        <PackageReference Include="Octokit" Version="9.1.0"/>
+        <PackageReference Include="CommunityToolkit.Diagnostics" Version="8.4.2"/>
+        <PackageReference Include="Octokit" Version="14.0.0"/>
     </ItemGroup>
-    
+
     <ItemGroup>
         <None Include="..\..\README.md" Pack="true" PackagePath="\"/>
     </ItemGroup>

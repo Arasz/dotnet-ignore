@@ -1,5 +1,5 @@
 ﻿using CliTool.Arguments;
-using CliTool.FIles;
+using CliTool.Files;
 using CliTool.Github.Models;
 using CliTool.Github.Services;
 using CliTool.Merge;
@@ -16,50 +16,42 @@ public sealed class GetGitIgnoreFileCommand(
     {
         var gitIgnoreFile = await GetGitIgnoreFileFromGithub(names, minimizeFileSize);
 
-        try
+        if (string.IsNullOrWhiteSpace(destination))
         {
-            if (string.IsNullOrWhiteSpace(destination))
-            {
-                destination = Environment.CurrentDirectory;
-            }
+            destination = Environment.CurrentDirectory;
+        }
 
-            await gitignoreFileWriter.WriteToFileAsync(destination, gitIgnoreFile.Content);
-        }
-        catch (Exception e)
-        {
-            ThrowHelper.ThrowArgumentException($"Destination path {destination} is invalid or there were " +
-                                               "problem with file access", e);
-        }
+        await gitignoreFileWriter.WriteToFileAsync(destination, gitIgnoreFile.Content);
     }
 
     private async Task<GitignoreFile> GetGitIgnoreFileFromGithub(string providedNames, bool minimizeFileSize)
     {
         var processedNames = NamesSplitStrategy.Split(providedNames);
-        
-        var gitIgnoreFiles =  await Task.WhenAll(processedNames.Select(gitignoreService.GetIgnoreFile));
 
-        EnsureAllGitIgnoreFilesWhereDownloaded(gitIgnoreFiles, processedNames);
+        var gitIgnoreFiles = await Task.WhenAll(processedNames.Select(gitignoreService.GetIgnoreFile));
 
-        return mergeStrategy.Merge(gitIgnoreFiles, minimizeFileSize);
+        var downloadedFiles = EnsureAllGitIgnoreFilesWereDownloaded(gitIgnoreFiles, processedNames);
+
+        return mergeStrategy.Merge(downloadedFiles, minimizeFileSize);
     }
 
-    private static void EnsureAllGitIgnoreFilesWhereDownloaded(IReadOnlyCollection<GitignoreFile> gitIgnoreFiles,
+    private static GitignoreFile[] EnsureAllGitIgnoreFilesWereDownloaded(
+        IReadOnlyCollection<GitignoreFile?> gitIgnoreFiles,
         IEnumerable<string> names)
     {
-        var isAnyEmptyFile = gitIgnoreFiles
-            .Any(file => file == GitignoreFile.Empty);
+        var notFoundNames = gitIgnoreFiles
+            .Zip(names, (file, name) => (file, name))
+            .Where(tuple => tuple.file is null)
+            .Select(tuple => tuple.name)
+            .ToArray();
 
-        if (!isAnyEmptyFile)
+        if (notFoundNames.Length > 0)
         {
-            return;
+            var exceptionMessage = string.Concat(notFoundNames
+                .Select(name => $"Name {name} is not a correct .gitignore file name{Environment.NewLine}"));
+            ThrowHelper.ThrowArgumentException(exceptionMessage);
         }
 
-        var exceptionMessageForFailedFiles = gitIgnoreFiles
-            .Zip(names, (file, name) => (file, name))
-            .Where(tuple => tuple.file == GitignoreFile.Empty)
-            .Select(tuple => $"Name {tuple.name} is not correct .gitignore file name {Environment.NewLine}")
-            .Aggregate(string.Empty, (msg, aggregate) => aggregate + msg);
-
-        ThrowHelper.ThrowArgumentException(exceptionMessageForFailedFiles);
+        return gitIgnoreFiles.Select(file => file!).ToArray();
     }
 }

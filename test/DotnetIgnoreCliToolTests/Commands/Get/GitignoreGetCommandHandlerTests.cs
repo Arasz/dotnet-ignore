@@ -1,7 +1,8 @@
 using System;
+using System.IO;
 using System.Threading.Tasks;
 using CliTool.Commands;
-using CliTool.FIles;
+using CliTool.Files;
 using CliTool.Github.Models;
 using CliTool.Github.Services;
 using DotnetIgnoreCliToolTests.Commands.Get.Stubs;
@@ -11,7 +12,7 @@ using Xunit;
 
 namespace DotnetIgnoreCliToolTests.Commands.Get
 {
-    public class GitignoreGetCommandHandlerTest : UnitTestBase
+    public class GitignoreGetCommandHandlerTest
     {
         [Fact]
         public async Task ShouldWriteGitignoreFile_WhenSingleGitignoreFileNameWasGiven()
@@ -80,7 +81,7 @@ namespace DotnetIgnoreCliToolTests.Commands.Get
             var githubServiceMock = new Mock<IGitignoreService>();
             githubServiceMock
                 .Setup(service => service.GetIgnoreFile(gitignoreFilename))
-                .ReturnsAsync(GitignoreFile.Empty)
+                .ReturnsAsync((GitignoreFile?)null)
                 .Verifiable();
             var fileWriterMock = new Mock<IGitignoreFileWriter>();
 
@@ -96,24 +97,22 @@ namespace DotnetIgnoreCliToolTests.Commands.Get
         }
 
         [Fact]
-        public async Task ShouldThrowArgException_WhenFileWriterFailed()
+        public async Task ShouldPropagateIOException_WhenFileWriterFails()
         {
             // Arrange
             const string gitignoreFilename = "test.gitignore";
             const string gitignoreContent = "test content # ./[*]";
-            const string destination = "C::::D/test";
+            const string destination = "C:/test";
 
             var mergeStrategyStub = new MergeStrategyStub();
             var githubServiceMock = new Mock<IGitignoreService>();
             githubServiceMock
                 .Setup(service => service.GetIgnoreFile(It.IsAny<string>()))
-                .ReturnsAsync(new GitignoreFile(gitignoreFilename, gitignoreContent))
-                .Verifiable();
+                .ReturnsAsync(new GitignoreFile(gitignoreFilename, gitignoreContent));
             var fileWriterMock = new Mock<IGitignoreFileWriter>();
             fileWriterMock
                 .Setup(writer => writer.WriteToFileAsync(destination, It.IsAny<string>()))
-                .Throws(new ArgumentException(string.Empty))
-                .Verifiable();
+                .Throws(new IOException("disk full"));
 
             var command = new GetGitIgnoreFileCommand(githubServiceMock.Object, mergeStrategyStub, fileWriterMock.Object);
 
@@ -121,10 +120,60 @@ namespace DotnetIgnoreCliToolTests.Commands.Get
             var executeCommandAction = async () => await command.GetGitIgnoreFile(gitignoreFilename, destination, false);
 
             // Assert
-            await executeCommandAction.Should().ThrowAsync<ArgumentException>();
+            await executeCommandAction.Should().ThrowAsync<IOException>();
+        }
 
-            githubServiceMock.Verify(service => service.GetIgnoreFile(gitignoreFilename), Times.Once);
-            fileWriterMock.Verify(writer => writer.WriteToFileAsync(destination, It.IsAny<string>()), Times.Once);
+        [Fact]
+        public async Task ShouldPropagateUnauthorizedAccessException_WhenFileWriterFails()
+        {
+            // Arrange
+            const string gitignoreFilename = "test.gitignore";
+            const string gitignoreContent = "test content # ./[*]";
+            const string destination = "C:/test";
+
+            var mergeStrategyStub = new MergeStrategyStub();
+            var githubServiceMock = new Mock<IGitignoreService>();
+            githubServiceMock
+                .Setup(service => service.GetIgnoreFile(It.IsAny<string>()))
+                .ReturnsAsync(new GitignoreFile(gitignoreFilename, gitignoreContent));
+            var fileWriterMock = new Mock<IGitignoreFileWriter>();
+            fileWriterMock
+                .Setup(writer => writer.WriteToFileAsync(destination, It.IsAny<string>()))
+                .Throws(new UnauthorizedAccessException("access denied"));
+
+            var command = new GetGitIgnoreFileCommand(githubServiceMock.Object, mergeStrategyStub, fileWriterMock.Object);
+
+            // Act
+            var executeCommandAction = async () => await command.GetGitIgnoreFile(gitignoreFilename, destination, false);
+
+            // Assert
+            await executeCommandAction.Should().ThrowAsync<UnauthorizedAccessException>();
+        }
+
+        [Fact]
+        public async Task ShouldWriteToCurrentDirectory_WhenDestinationIsNotProvided()
+        {
+            // Arrange
+            const string gitignoreFilename = "test.gitignore";
+            const string gitignoreContent = "test content # ./[*]";
+
+            var mergeStrategyStub = new MergeStrategyStub();
+            var githubServiceMock = new Mock<IGitignoreService>();
+            githubServiceMock
+                .Setup(service => service.GetIgnoreFile(It.IsAny<string>()))
+                .ReturnsAsync(new GitignoreFile(gitignoreFilename, gitignoreContent));
+            var fileWriterMock = new Mock<IGitignoreFileWriter>();
+            fileWriterMock
+                .Setup(writer => writer.WriteToFileAsync(It.IsAny<string>(), It.IsAny<string>()))
+                .Returns(Task.CompletedTask);
+
+            var command = new GetGitIgnoreFileCommand(githubServiceMock.Object, mergeStrategyStub, fileWriterMock.Object);
+
+            // Act
+            await command.GetGitIgnoreFile(gitignoreFilename, null, false);
+
+            // Assert
+            fileWriterMock.Verify(writer => writer.WriteToFileAsync(Environment.CurrentDirectory, gitignoreContent), Times.Once);
         }
     }
 }
