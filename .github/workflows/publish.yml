@@ -1,27 +1,24 @@
 name: publish
 
 on:
-  pull_request:
-    types: [closed]
+  push:
     branches: [master]
   workflow_dispatch:
 
 permissions:
   contents: read
   id-token: write # required for NuGet Trusted Publishing (OIDC token issuance)
-  pull-requests: write # to comment the released version on the merged PR
 
 jobs:
   publish:
-    # Any PR merged to master triggers a publish (master is implicitly the latest
-    # release). Manual dispatch always runs.
-    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.merged == true
+    # Push to master (a merge is a push) or manual dispatch: the run executes
+    # from refs/heads/master, which is the only source the 'production'
+    # environment's branch policy allows.
     runs-on: ubuntu-latest
     # The NuGet Trusted Publishing policy 'Dotnet Ignore' is bound to the
-    # 'production' environment — verified live: the token exchange rejects any
-    # other name with HTTP 401 ("Environment mismatch ... expected 'production'").
-    # The required reviewer configured on this environment also pauses the run
-    # until it is approved in the UI.
+    # 'production' environment (verified live: the token exchange rejects any
+    # other name with HTTP 401). The required reviewer configured on this
+    # environment pauses the run until it is approved in the UI.
     environment: production
     steps:
       - uses: actions/checkout@v4
@@ -44,12 +41,3 @@ jobs:
 
       - name: Push to NuGet
         run: dotnet nuget push ./artifacts/*.nupkg --api-key ${{ steps.login.outputs.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
-
-      - name: Announce released version
-        if: github.event_name == 'pull_request'
-        env:
-          GH_TOKEN: ${{ github.token }}
-          PR_NUMBER: ${{ github.event.pull_request.number }}
-        run: |
-          VERSION=$(find ./artifacts -maxdepth 1 -name '*.nupkg' | head -1 | grep -oE '[0-9]+\.[0-9]+\.[0-9]+')
-          gh pr comment "$PR_NUMBER" --body "Released as dotnet-ignore ${VERSION} on NuGet." || true
