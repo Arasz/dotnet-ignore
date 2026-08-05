@@ -13,7 +13,7 @@
         <GeneratePackageOnBuild Condition="'$(Configuration)'=='Release'">True</GeneratePackageOnBuild>
         <IsPackable>true</IsPackable>
         <PackAsTool>true</PackAsTool>
-        <ToolCommandName>ignore</ToolCommandName>
+        <ToolCommandName>dotnet-ignore</ToolCommandName>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -31,7 +31,7 @@
             - clean CLI error messages with exit code 1
             - GitHub Actions CI/CD replaces Azure DevOps (see CHANGELOG.md)
         </PackageReleaseNotes>
-        <Version>1.1.0</Version>
+        <Version>1.2.0</Version>
     </PropertyGroup>
 
     <ItemGroup>

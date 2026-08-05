@@ -3,6 +3,15 @@
 All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [1.2.0] - 2026-08-05
+
+### Fixed
+- Tool command name is now `dotnet-ignore`, so the documented
+  `dotnet ignore get ...` invocation works. The shim for a global tool is named
+  after `ToolCommandName`, and `dotnet <command>` dispatches to a
+  `dotnet-<command>` shim on PATH — with `ToolCommandName=ignore` the README's
+  `dotnet ignore` usage could never resolve (only bare `ignore` worked).
+
 ## [1.1.0] - 2026-08-05
 
 ### Added
