@@ -8,7 +8,7 @@ using Xunit;
 
 namespace DotnetIgnoreCliToolTests.Commands.Get
 {
-    public class SimpleMergeStrategyTests : UnitTestBase
+    public class SimpleMergeStrategyTests
     {
         [Fact]
         public void ShouldContainCreatedFileMessage_WhenOnlyOneFileExists()
@@ -85,7 +85,7 @@ namespace DotnetIgnoreCliToolTests.Commands.Get
                 .Content
                 .Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries)
                 .Should()
-                .OnlyContain(contentLine => contentLine.StartsWith("#"));
+                .OnlyContain(contentLine => contentLine.StartsWith('#'));
         }
     }
 }

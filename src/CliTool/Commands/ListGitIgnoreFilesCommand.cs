@@ -1,5 +1,4 @@
-﻿using System.Collections.Immutable;
-using CliTool.Github.Services;
+﻿using CliTool.Github.Services;
 
 namespace CliTool.Commands;
 

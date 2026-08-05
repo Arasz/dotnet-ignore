@@ -11,7 +11,7 @@ using Xunit;
 
 namespace DotnetIgnoreCliToolTests.Commands.Get
 {
-    public class GitignoreGetCommandHandlerTest : UnitTestBase
+    public class GitignoreGetCommandHandlerTest
     {
         [Fact]
         public async Task ShouldWriteGitignoreFile_WhenSingleGitignoreFileNameWasGiven()

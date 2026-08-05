@@ -7,7 +7,7 @@ using Xunit;
 
 namespace DotnetIgnoreCliToolTests.Github
 {
-    public class GithubClientTests : UnitTestBase
+    public class GithubClientTests
     {
         [Fact]
         public async Task GetRepositoryShouldReturnRequestedGitRepository()

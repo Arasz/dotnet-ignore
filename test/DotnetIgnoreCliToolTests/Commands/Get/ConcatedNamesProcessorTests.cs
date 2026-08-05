@@ -5,7 +5,7 @@ using Xunit;
 
 namespace DotnetIgnoreCliToolTests.Commands.Get
 {
-    public class ConcatedNamesProcessorTests : UnitTestBase
+    public class ConcatedNamesProcessorTests
     {
         [Theory]
         [InlineData("a", new[]
