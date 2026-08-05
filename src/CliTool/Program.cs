@@ -5,12 +5,13 @@ using CliTool.Github.Services;
 using CliTool.Merge;
 using Cocona;
 using Microsoft.Extensions.DependencyInjection;
-
-
+using Octokit;
 
 var consoleAppBuilder = CoconaApp.CreateBuilder();
 
 consoleAppBuilder.Services
+    .AddSingleton<IGitHubClient>(_ => new GitHubClient(new ProductHeaderValue("dotnet-ignore")))
+    .AddSingleton(_ => new HttpClient())
     .AddTransient<IGitignoreService, GithubGitignoreService>()
     .AddTransient<IGitignoreFileWriter, GitignoreFileWriter>()
     .AddTransient<IMergeStrategy, SimpleMergeStrategy>()
@@ -28,11 +29,25 @@ consoleApp.AddCommand("get", ([Argument(Description =
         string? destination,
         [Option('m', Description = "Removes comments, duplicated and empty lines from .gitignore file")]
         bool minimizeFileSize,
-        GetGitIgnoreFileCommand command) => command.GetGitIgnoreFile(names, destination, minimizeFileSize))
+        GetGitIgnoreFileCommand command) => RunAndReportErrors(() => command.GetGitIgnoreFile(names, destination, minimizeFileSize)))
     .WithDescription("Build .gitignore file from files specified by the names parameter");
 
 consoleApp.AddCommand("list",
-        ([Option('s', Description = "Prints files names without .gitignore part")] bool shorten, ListGitIgnoreFilesCommand command) => command.ListGitIgnoreFiles(shorten))
+        ([Option('s', Description = "Prints files names without .gitignore part")] bool shorten, ListGitIgnoreFilesCommand command) => RunAndReportErrors(() => command.ListGitIgnoreFiles(shorten)))
     .WithDescription("Lists all available .gitignore files");
 
 consoleApp.Run();
+
+static async Task<int> RunAndReportErrors(Func<Task> action)
+{
+    try
+    {
+        await action();
+        return 0;
+    }
+    catch (Exception exception)
+    {
+        Console.Error.WriteLine($"Error: {exception.Message}");
+        return 1;
+    }
+}

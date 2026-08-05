@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text;
 using CliTool.Github.Models;
 
@@ -16,11 +17,11 @@ namespace CliTool.Merge
             ArgumentNullException.ThrowIfNull(gitignoreFiles);
 
             var stringBuilder = new StringBuilder();
-            
-            stringBuilder.AppendLine($"{CreatedFileMessage} on {DateTime.Now:g}");
+
+            stringBuilder.AppendLine($"{CreatedFileMessage} on {DateTimeOffset.UtcNow.ToString("yyyy-MM-dd'T'HH:mm:ss'Z'", CultureInfo.InvariantCulture)}");
             if (minimizeFileSize)
             {
-                stringBuilder.AppendLine("# Minimized file size. Comments, duplicated lines and empty lines where removed.");
+                stringBuilder.AppendLine("# Minimized file size. Comments, duplicated lines and empty lines were removed.");
             }
 
             stringBuilder.AppendLine($"# Created from {gitignoreFiles.Count} .gitignore files: {string.Join(", ", gitignoreFiles.Select(file => file.Name))}");
