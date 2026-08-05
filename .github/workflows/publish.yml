@@ -17,11 +17,12 @@ jobs:
     # release). Manual dispatch always runs.
     if: github.event_name == 'workflow_dispatch' || github.event.pull_request.merged == true
     runs-on: ubuntu-latest
-    # Two jobs in one: the NuGet Trusted Publishing policy is bound to the
-    # 'publish' environment (the OIDC token must carry it, or the token exchange
-    # fails with 401), and a required reviewer configured on this environment
-    # pauses the run until it is approved in the UI.
-    environment: publish
+    # The NuGet Trusted Publishing policy 'Dotnet Ignore' is bound to the
+    # 'production' environment — verified live: the token exchange rejects any
+    # other name with HTTP 401 ("Environment mismatch ... expected 'production'").
+    # The required reviewer configured on this environment also pauses the run
+    # until it is approved in the UI.
+    environment: production
     steps:
       - uses: actions/checkout@v4
 
