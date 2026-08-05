@@ -1,4 +1,4 @@
-name: latest-label
+name: labeler
 
 on:
   issue_comment:
