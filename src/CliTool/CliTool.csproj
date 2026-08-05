@@ -25,8 +25,11 @@
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageReleaseNotes>
-            - migrated to .NET 10
-            - updated all NuGet packages (Octokit 14, xunit v3)
+            - migrated to .NET 10 and updated all NuGet packages (Octokit 14, xunit v3)
+            - fixed list -s flag (was inverted)
+            - deterministic UTC merge header
+            - clean CLI error messages with exit code 1
+            - GitHub Actions CI/CD replaces Azure DevOps (see CHANGELOG.md)
         </PackageReleaseNotes>
         <Version>1.1.0</Version>
     </PropertyGroup>

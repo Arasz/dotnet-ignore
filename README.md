@@ -1,23 +1,58 @@
 # dotnet-ignore
-[![Build status](https://arasz.visualstudio.com/dotnet-ignore/_apis/build/status/Build%20and%20push)](https://arasz.visualstudio.com/dotnet-ignore/_build/latest?definitionId=3)
+[![build](https://github.com/Arasz/dotnet-ignore/actions/workflows/build.yml/badge.svg)](https://github.com/Arasz/dotnet-ignore/actions/workflows/build.yml)
 
-Global .NET Core tool that can download .gitignore file from github gitignore repository.
+Global .NET tool that downloads `.gitignore` files from the
+[github/gitignore](https://github.com/github/gitignore) repository.
 
-## How to get it?
-From [nuget](https://www.nuget.org/packages/dotnet-ignore)
+## Requirements
+
+- [.NET 10 SDK](https://dotnet.microsoft.com/download)
 
 ## Installation
-Execute 
+
 ```
 dotnet tool install -g dotnet-ignore
 ```
 
-## How to run it? 
+## Usage
 
-Just run
+Download and merge `.gitignore` files by name (case insensitive, with or without
+the `.gitignore` suffix; multiple names are merged into one file):
 
 ```
-dotnet ignore -h
+dotnet ignore get VisualStudio,Node
 ```
 
-to see complete description of usage.
+Remove comments, duplicate and empty lines to minimize the file size:
+
+```
+dotnet ignore get VisualStudio,Node -m
+```
+
+Save the file into a specific directory:
+
+```
+dotnet ignore get VisualStudio -d ./path/to/dir
+```
+
+List all available files:
+
+```
+dotnet ignore list
+```
+
+List only file names without the `.gitignore` suffix:
+
+```
+dotnet ignore list -s
+```
+
+Run `dotnet ignore -h` for the complete command description.
+
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md).
+
+## License
+
+[Apache-2.0](LICENSE)
