@@ -10,8 +10,17 @@ Global .NET tool that downloads `.gitignore` files from the
 
 ## Installation
 
-```
+```sh
 dotnet tool install -g dotnet-ignore
+```
+
+The global-tool install directory is `~/.dotnet/tools` on macOS/Linux
+(`%USERPROFILE%\.dotnet\tools` on Windows). If `dotnet ignore` is not found
+after install, add it to `PATH`:
+
+```sh
+# zsh / bash (macOS, Linux)
+export PATH="$PATH:$HOME/.dotnet/tools"
 ```
 
 ## Usage
