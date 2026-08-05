@@ -60,16 +60,18 @@ before pushing to NuGet:
 3. Approve the run: Actions -> the `publish` run -> Review deployments -> Approve and
    deploy. The package is pushed to NuGet via
    [Trusted Publishing](https://learn.microsoft.com/en-us/nuget/nuget-org/trusted-publishing)
-   (no API keys), and the released version is commented on the merged PR.
+   (no API keys).
 
 The workflow can also be started manually (Actions -> publish -> Run workflow),
-subject to the same approval.
+subject to the same approval. Every push to `master` creates a pending run; the
+approval step is the release control.
 
 > The approval gate is the `production` environment, which already lists you as a
-> required reviewer — every publish run pauses for your approval (Review
-> deployments -> Approve and deploy). The NuGet Trusted Publishing policy is bound
-> to the same environment name, so the OIDC token exchange only succeeds when the
-> job runs in it. Manage the gate at Settings -> Environments -> `production`.
+> required reviewer and allows `master` as the only deployment source — every
+> publish run pauses for your approval (Review deployments -> Approve and deploy).
+> The NuGet Trusted Publishing policy is bound to the same environment name, so
+> the OIDC token exchange only succeeds when the job runs in it. Manage the gate
+> at Settings -> Environments -> `production`.
 
 ## Changelog
 
