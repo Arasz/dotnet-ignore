@@ -1,6 +1,4 @@
-﻿using System.Text;
-
-namespace CliTool.Files
+﻿namespace CliTool.Files
 {
     public class GitignoreFileWriter : IGitignoreFileWriter
     {
@@ -8,17 +6,8 @@ namespace CliTool.Files
 
         public async Task WriteToFileAsync(string destination, string content)
         {
-            if (string.IsNullOrEmpty(destination))
-            {
-                destination = Directory.GetCurrentDirectory();
-            }
-
             var path = Path.Combine(destination, GitignoreFileName);
-            using (var fileStream = File.Create(path))
-            {
-                var convertedContent = Encoding.UTF8.GetBytes(content);
-                await fileStream.WriteAsync(convertedContent);
-            }
+            await File.WriteAllTextAsync(path, content);
         }
     }
 }
