@@ -1,3 +1,5 @@
+
+
 # dotnet-ignore
 [![build](https://github.com/Arasz/dotnet-ignore/actions/workflows/build.yml/badge.svg)](https://github.com/Arasz/dotnet-ignore/actions/workflows/build.yml)
 
@@ -21,6 +23,9 @@ after install, add it to `PATH`:
 ```sh
 # zsh / bash (macOS, Linux)
 export PATH="$PATH:$HOME/.dotnet/tools"
+
+# PowerShell (Windows)
+$env:PATH += ";$env:USERPROFILE\.dotnet\tools"
 ```
 
 ## Usage
