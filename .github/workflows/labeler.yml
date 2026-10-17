@@ -7,7 +7,7 @@
 
 name: Labeler
 # Narrowed from the bare `[pull_request_target]` shorthand (which fires on every
-# synchronize too): actions/labeler@v7 defaults sync-labels to false, so it only
+# synchronize too): actions/labeler@bf12e9b00b37c5c0ca2b87b79b2daf7891dbda13 # v7.0.0 defaults sync-labels to false, so it only
 # ever adds labels — re-running it on every push to the PR branch adds nothing.
 # opened/reopened is enough to label a PR once.
 on:
@@ -17,7 +17,7 @@ on:
 jobs:
   label:
     # ubuntu-slim (GA 2026-01-22): $0.002/min vs $0.006 for ubuntu-latest. Safe here —
-    # this job only runs actions/labeler@v7 (a GitHub-API call), no Docker, no `services:`,
+    # this job only runs actions/labeler@bf12e9b00b37c5c0ca2b87b79b2daf7891dbda13 # v7.0.0 (a GitHub-API call), no Docker, no `services:`,
     # no .NET. ubuntu-slim has a hard 15-min cap and runs unprivileged; do not add a
     # `services:` block or a Docker step to this job without moving it back to ubuntu-latest.
     runs-on: ubuntu-slim
@@ -27,6 +27,6 @@ jobs:
       pull-requests: write
 
     steps:
-    - uses: actions/labeler@v7
+    - uses: actions/labeler@bf12e9b00b37c5c0ca2b87b79b2daf7891dbda13 # v7.0.0
       with:
         repo-token: "${{ secrets.GITHUB_TOKEN }}"
